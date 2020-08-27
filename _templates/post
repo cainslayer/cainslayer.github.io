@@ -1,0 +1,9 @@
+---
+layout: {{ layout }}
+title: "{{ title }}"
+date: {{ date }}
+---
+
+<link rel="stylesheet" href="{{"/extra/doc.css" | relative_url }}">
+
+

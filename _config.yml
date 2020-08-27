@@ -13,10 +13,11 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: cainslayer的仓库
+title: closesauce.
 #email: anonymous@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  知识分享和随笔
+  世界的意义存在于世界之外。
+author: cainslayer
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: anonymous
@@ -24,9 +25,15 @@ github_username: cainslayer
 
 # Build settings
 markdown: kramdown
-theme: minima
+#theme: minima
+theme: jekyll-theme-clean-blog
+remote_theme: StartBootstrap/startbootstrap-clean-blog-jekyll
+paginate: 5
+paginate_path: "/posts/:num"
 plugins:
   - jekyll-feed
+  - jekyll-paginate
+
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
