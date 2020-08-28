@@ -1,7 +1,0 @@
----
-layout: {{ layout }}
-title: "{{ title }}"
----
-
-<link rel="stylesheet" href="{{"/extra/doc.css" | relative_url }}">
-
