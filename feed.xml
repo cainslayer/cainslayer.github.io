@@ -1,29 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-28T21:33:30+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-31T23:15:06+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">Jekyll建站和Gem主题的使用</title><link href="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html" rel="alternate" type="text/html" title="Jekyll建站和Gem主题的使用" /><published>2020-08-30T23:11:04+08:00</published><updated>2020-08-30T23:11:04+08:00</updated><id>http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme</id><content type="html" xml:base="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;{{&quot;/extra/doc.css&quot; | relative_url }}&quot;&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include &quot;stdio.h&quot;
-&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+Jekyll是一个Ruby语言编写的博客类网站的骨架，支持直接使用markdown代码编写页面。我是在Github Pages上建的blog。因为GP支持Jekyll站点的自动编译，如果使用的是GP，那么用Jekyll建站可以不用考虑环境的问题。
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+由于Jekyll是基于Ruby的，可以在本地搭建Ruby的环境，这样就可以在本地做好页面的调试，部署在GP的Jekyll站点是难以在线调试的。配置Ruby环境最好选择LINUX，这样可以方便快速地配置环境，Windows用户可以在`wsl`上操作。下面叙述Debian LINUX下搭建环境的过程。
 
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&amp;emsp;
 
-&lt;p&gt;中文文字显示&lt;/p&gt;
+安装Ruby和编译环境
 
-&lt;p&gt;Roman alphabet display&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-08-15T21:34:40+08:00</published><updated>2020-08-15T21:34:40+08:00</updated><id>http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+```
+apt install ruby ruby-dev make gcc g++ bundler
+```
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+安装Jekyll
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&gt; 可以选择先切换gem和bundler的安装源为国内源，这样会大大加快安装速度。
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+```
+gem install jekyll
+```
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>cainslayer</name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+&amp;emsp;
+
+环境搭建好时，建立一个Jekyll工程只需使用以下命令：
+
+```
+jekyll new [工程名称]
+```
+
+这句命令会在当前目录下创建一个以工程名称命名的工程目录，然后在文件夹里添加Jekyll网站的整个框架。现在测试一下网站是否可以运行。运行Jekyll网站可以直接在**工程目录**下执行以下命令。
+
+```
+bundle exec jekyll serve
+```
+
+等待网站的编译。如果程序没有报错退出，说明编译成功，然后就可以在`localhost:4000`查看网站的运行情况了。
+
+最后需要对`_config.yml`和页面进行配置，把信息改成自己的。
+
+这时，网站已经可以使用和部署了，Jekyll的主题默认使用了`minima`。这个主题虽然简单，但是功能齐全，足够使用。我个人看到Github里上挂了很好看的主题，于是尝试配置了一下。使用主题有两种方式：
+
+一种方式是直接把主题的工程clone下来，然后手动修改配置，这种方法非常简单迅速，甚至可以在没有环境时完成对站点的配置。
+
+另一种方式是使用`Gemfile`引用主题的gem包，这种方法缺点非常明显。主题的gem包把配置文件全都封装进去，可配置的文件仅限于`_config.yml`和页面，这样就难以自己修改可复用元素的样式。
+但是使用这种方式，工程文件夹里只有有限的内容与相应主题相关，这让我可以迅速在不同主题之间迁移；相应地，在主题可以升级时只需执行升级命令，不用处理很多文件；
+这样还能减少工程目录的文件数目。
+
+使用gem格式的主题，首先要在Github上找到一个想要使用的主题项目，在项目页面上找到**主题的gem**。第二步是把主题添加到配置里，需要修改的是`Gemfile`和`_config.yml`
+
+```
+# Gemfile
+gem &quot;[gem名字]&quot;
+
+# _config.yml
+theme: [gem名字]
+```
+
+在工程目录执行命令来安装主题
+
+```
+bundle install
+```
+
+然后就可以参考**对应主题**工程页面上的方法对主题进行配置，每种主题的配置方法**各不相同**，需要仔细阅读配置方法，必要时阅读工程源文件。</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;{{&quot;/extra/doc.css&quot; | relative_url }}&quot;&gt;
+
+{% highlight c %}
+#include &quot;stdio.h&quot;
+int main() {
+	int a, b;
+	printf(&quot;%d\n&quot;, a+b);
+	return 0;
+}
+{% endhighlight %}
+
+{% highlight python %}
+def add(a, b):
+	return a + b
+
+print(add(1, 2))
+{% endhighlight %}
+
+中文文字显示
+
+Roman alphabet display</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-08-15T21:34:40+08:00</published><updated>2020-08-15T21:34:40+08:00</updated><id>http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html">You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+
+To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+
+Jekyll also offers powerful support for code snippets:
+
+{% highlight ruby %}
+def print_hi(name)
+  puts &quot;Hi, #{name}&quot;
+end
+print_hi('Tom')
+#=&gt; prints 'Hi, Tom' to STDOUT.
+{% endhighlight %}
+
+Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/</content><author><name>cainslayer</name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>

@@ -2,7 +2,8 @@
 @import "highlight/friendly.css";
 
 pre, code {
-	border-left: solid 3px darkcyan;
+	border: solid 1px grey;
+	border-radius: 3px;
 }
 
 code {
@@ -11,6 +12,7 @@ code {
 
 pre {
 	padding: 8px 12px;
+	border-left: solid 3px darkcyan;
 }
 
 pre > code {
