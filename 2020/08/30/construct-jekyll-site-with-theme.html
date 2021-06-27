@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    Jekyll建站和Gem主题的使用 - closesauce.
+    
+  </title>
+
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html">
+  <link rel="alternate" type="application/rss+xml" title="closesauce." href="/feed.xml">
+
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">closesauce.</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/bgimage/76602490_p0_master1200.jpg')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Jekyll建站和Gem主题的使用</h1>
+            
+            <span class="meta">Posted by
+              <a href="#">cainslayer</a>
+              on August 30, 2020 &middot; <span class="reading-time" title="Estimated read time">
+  
+   1 min  read </span>
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+
+        <link rel="stylesheet" href="/extra/doc.css" />
+
+<p>Jekyll是一个Ruby语言编写的博客类网站的骨架，支持直接使用markdown代码编写页面。我是在Github Pages上建的blog。因为GP支持Jekyll站点的自动编译，如果使用的是GP，那么用Jekyll建站可以不用考虑环境的问题。</p>
+
+<p>由于Jekyll是基于Ruby的，可以在本地搭建Ruby的环境，这样就可以在本地做好页面的调试，部署在GP的Jekyll站点是难以在线调试的。配置Ruby环境最好选择LINUX，这样可以方便快速地配置环境，Windows用户可以在<code class="language-plaintext highlighter-rouge">wsl</code>上操作。下面叙述Debian LINUX下搭建环境的过程。</p>
+
+<p> </p>
+
+<p>安装Ruby和编译环境</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt install ruby ruby-dev make gcc g++ bundler
+</code></pre></div></div>
+
+<p>安装Jekyll</p>
+
+<blockquote>
+  <p>可以选择先切换gem和bundler的安装源为国内源，这样会大大加快安装速度。</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install jekyll
+</code></pre></div></div>
+
+<p> </p>
+
+<p>环境搭建好时，建立一个Jekyll工程只需使用以下命令：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll new [工程名称]
+</code></pre></div></div>
+
+<p>这句命令会在当前目录下创建一个以工程名称命名的工程目录，然后在文件夹里添加Jekyll网站的整个框架。现在测试一下网站是否可以运行。运行Jekyll网站可以直接在<strong>工程目录</strong>下执行以下命令。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll serve
+</code></pre></div></div>
+
+<p>等待网站的编译。如果程序没有报错退出，说明编译成功，然后就可以在<code class="language-plaintext highlighter-rouge">localhost:4000</code>查看网站的运行情况了。</p>
+
+<p>最后需要对<code class="language-plaintext highlighter-rouge">_config.yml</code>和页面进行配置，把信息改成自己的。</p>
+
+<p>这时，网站已经可以使用和部署了，Jekyll的主题默认使用了<code class="language-plaintext highlighter-rouge">minima</code>。这个主题虽然简单，但是功能齐全，足够使用。我个人看到Github里上挂了很好看的主题，于是尝试配置了一下。使用主题有两种方式：</p>
+
+<p>一种方式是直接把主题的工程clone下来，然后手动修改配置，这种方法非常简单迅速，甚至可以在没有环境时完成对站点的配置。</p>
+
+<p>另一种方式是使用<code class="language-plaintext highlighter-rouge">Gemfile</code>引用主题的gem包，这种方法缺点非常明显。主题的gem包把配置文件全都封装进去，可配置的文件仅限于<code class="language-plaintext highlighter-rouge">_config.yml</code>和页面，这样就难以自己修改可复用元素的样式。
+但是使用这种方式，工程文件夹里只有有限的内容与相应主题相关，这让我可以迅速在不同主题之间迁移；相应地，在主题可以升级时只需执行升级命令，不用处理很多文件；
+这样还能减少工程目录的文件数目。</p>
+
+<p>使用gem格式的主题，首先要在Github上找到一个想要使用的主题项目，在项目页面上找到<strong>主题的gem</strong>。第二步是把主题添加到配置里，需要修改的是<code class="language-plaintext highlighter-rouge">Gemfile</code>和<code class="language-plaintext highlighter-rouge">_config.yml</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Gemfile
+gem "[gem名字]"
+
+# _config.yml
+theme: [gem名字]
+</code></pre></div></div>
+
+<p>在工程目录执行命令来安装主题</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+</code></pre></div></div>
+
+<p>然后就可以参考<strong>对应主题</strong>工程页面上的方法对主题进行配置，每种主题的配置方法<strong>各不相同</strong>，需要仔细阅读配置方法，必要时阅读工程源文件。</p>
+
+
+        <hr>
+
+        <div class="clearfix">
+
+          
+          <a class="btn btn-primary float-left" href="/2020/08/25/code-test.html" data-toggle="tooltip" data-placement="top" title="文字测试">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" data-toggle="tooltip" data-placement="top" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          <li class="list-inline-item">
+            <a href="https://twitter.com/anonymous">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://github.com/cainslayer">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; cainslayer 2021</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/scripts.js"></script>
+
+<script src="/assets/scripts.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '');
+</script>
+
+
+
+</body>
+
+</html>

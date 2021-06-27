@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-27T20:45:31+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件</title><link href="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" rel="alternate" type="text/html" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件" /><published>2020-09-04T11:31:31+08:00</published><updated>2020-09-04T11:31:31+08:00</updated><id>http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress</id><content type="html" xml:base="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+
+&lt;h2 id=&quot;octopress的集成&quot;&gt;Octopress的集成&lt;/h2&gt;
+
+&lt;p&gt;Octopress插件为Jekyll的功能提供了扩展。它的主要功能是为blog的撰写和网站的发布提供一些CLI命令，简化这些过程。首先需要在gem里安装octopress。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem install octopress
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在Jekyll里集成octopress，官方给的方法是直接通过Gemfile把octopress的gem集成进去，就是在Gemfile里添加&lt;/p&gt;
+
+&lt;p&gt;&lt;del&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem &apos;octopress&apos;&lt;/code&gt;&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;我在使用这种方法时，运行&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle install&lt;/code&gt;后dependency报错，前提是使用了jekyll命令来初始化工程。如果使用了octopress命令来初始化工程，则没有出现依赖问题。那么，如果确定要集成octopress，最好使用octopress命令来建立工程&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress new [工程名字]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;octopress的使用&quot;&gt;Octopress的使用&lt;/h2&gt;
+
+&lt;p&gt;在集成octopress以后。就可以通过octopress的CLI命令来管理jekyll的文章。&lt;/p&gt;
+
+&lt;h3 id=&quot;octopress-init&quot;&gt;octopress init&lt;/h3&gt;
+
+&lt;p&gt;这个操作会在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/_templates&lt;/code&gt;目录下创建模板，当调用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;octopress new [页面模板]&lt;/code&gt;时会自动套用相应名称的模板。可以修改对应的模板文件，使得建立对应种类文章时自动添加模板的内容。&lt;/p&gt;
+
+&lt;h3 id=&quot;octopress-new-工程名&quot;&gt;octopress new [工程名]&lt;/h3&gt;
+
+&lt;p&gt;等同于先使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll new&lt;/code&gt;建立一个工程，然后在工程目录下执行&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;octopress init&lt;/code&gt;。建议使用。&lt;/p&gt;
+
+&lt;h3 id=&quot;octopress-new-页面模板-名称&quot;&gt;octopress new [页面模板] [名称]&lt;/h3&gt;
+
+&lt;p&gt;使用对应页面模板创建文章，可用的模板有&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;post 在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt;目录建立一篇文章&lt;/li&gt;
+  &lt;li&gt;page 在根目录建立一个页面&lt;/li&gt;
+  &lt;li&gt;draft 在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_draft&lt;/code&gt;目录建立一篇草稿，草稿不会被编译&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可以建立模板文件，但只能通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--template&lt;/code&gt;参数指定使用的模板。&lt;/p&gt;
+
+&lt;h3 id=&quot;octopress-publish-草稿--unpublish-文章&quot;&gt;octopress publish [草稿] / unpublish [文章]&lt;/h3&gt;
+
+&lt;p&gt;publish作用是把草稿转化为文章，unpublish把文章转化为草稿。如果传入参数是关键词而不是文件名，就应用到所有包含关键词的页。&lt;/p&gt;
+
+&lt;h3 id=&quot;octopress-deploy&quot;&gt;octopress deploy&lt;/h3&gt;
+
+&lt;p&gt;octopress支持部署功能，此功能先在本地生成静态页面，然后通过配置文件，将网站部署到对应平台上。&lt;/p&gt;
+
+&lt;p&gt;我通过它把网站部署在GitHub Pages。首先建立配置文件&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress deploy init git git@github.com:[用户名]/[Github Pages仓库]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这样会建立一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt;文件，可以进一步调整部署的配置。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;应当在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;屏蔽&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deploy&lt;/code&gt;，而且建议屏蔽&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_drafts&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile.lock&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;然后可以直接部署网站&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;startbootstrap-clean-blog-jekyll主题的集成&quot;&gt;Startbootstrap-clean-blog-jekyll主题的集成&lt;/h2&gt;
+
+&lt;p&gt;在jekyll中使用自定义主题，首先要将主题引入&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;，然后在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中设置主题。此时如果执行编译，就可以在工程中应用主题。&lt;/p&gt;
+
+&lt;p&gt;为了提高主题的可配置性，主题的不会提供所有的文件，这时应当参考主题对应仓库中的文档添加和配置这些页面。在使用主题时，也需参照文档，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中对主题的参数进行配置。&lt;/p&gt;
+
+&lt;h3 id=&quot;为startbootstrap-clean-blog-jekyll添加页面&quot;&gt;为startbootstrap-clean-blog-jekyll添加页面&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;不同主题包的作者会根据需要，选择将一部分页面不包含在主题包中，而是让用户自己建立相应页面。这样做虽然大大增加了主题的可定制度，但是提高了主题的使用门槛。如果页面可定制的内容少，可以选择从&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中读取。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;startbootstrap-clean-blog-jekyll主题需要用户定义这几个页面&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;index.html&lt;/code&gt; 主页&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;about.html&lt;/code&gt; about页&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;contact.html&lt;/code&gt; contact页&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;posts/index.html&lt;/code&gt; 文章列表页&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;需要根据主题文档中的相应部分描述对相应的页面进行配置。也可以直接复制样例的页面内容，但是需要根据实际情况去除或修改不兼容的代码。&lt;/p&gt;
+
+&lt;p&gt;可以配置模板头部的字段，修改&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;background&lt;/code&gt;字段可添加背景图片的url。&lt;/p&gt;
+
+&lt;h3 id=&quot;解决语法高亮问题&quot;&gt;解决语法高亮问题&lt;/h3&gt;
+
+&lt;p&gt;startbootstrap-clean-blog-jekyll自带语法高亮插件，可以对页面上的代码进行高亮处理。从开发人员工具看到，页面上的代码已经进行了高亮标注，但对应标注的样式未包含css实现。&lt;/p&gt;
+
+&lt;p&gt;可以人为地加入缺失的标注，通过css的方式引入自己实现的css。参考github issues或一些blog的解决方案，再根据自身和实际情况，对css进行定制。&lt;/p&gt;
+
+&lt;p&gt;其次，startbootstrap-clean-blog-jekyll也不包含代码块边框的实现。与代码有关的css标签是pre和code，pre是跨行的代码块，code是行内和跨行共用的标签，需要借助一些技巧，这里从&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minima&lt;/code&gt;主题借鉴了了一些代码&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;c&quot;&gt;/* doc.css */&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&quot;highlight/friendly.css&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;border&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;solid&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1px&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;border-radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1px&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;8px&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;12px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;border-left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;solid&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3px&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;darkcyan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;border&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;padding-right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;padding-left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nl&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Lora&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Noto Sans SC&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Roboto&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sans-serif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;参考Issues#138&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这里 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@import&lt;/code&gt; 的就是上文说到与语法高亮相关的css，可以从
+&lt;a href=&quot;https://github.com/iwootten/jekyll-syntax&quot;&gt;woottenn/jekyll-syntax&lt;/a&gt;
+仓库找到理想的高亮实现。&lt;/p&gt;
+
+&lt;p&gt;最后可以在每个需要代码的页面引入css，或直接在octopress的模板中引入，这样以后建立的页面都可以集成高亮的css。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/doc.css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;使用高亮时，用liquid语法包含对应的代码块即可&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;使用时需要去除括号和百分号之间的空格&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{ % highlight ruby % }
+    // Insert Code Here
+{ % endhighlight % }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;配置paginate&quot;&gt;配置paginate&lt;/h3&gt;
+
+&lt;p&gt;startbootstrap-clean-blog-jekyll集成了paginate插件，来实现文章列表页的分页功能。&lt;/p&gt;
+
+&lt;p&gt;需要在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;配置paginate。
+在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;paginate&lt;/code&gt;配置每页文章数，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;paginate_path&lt;/code&gt;配置文章列表的api地址，再引入&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll-feed&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll-paginate&lt;/code&gt;插件。&lt;/p&gt;
+
+&lt;h3 id=&quot;其他事项&quot;&gt;其他事项&lt;/h3&gt;
+
+&lt;p&gt;Ruby3默认不包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webrick&lt;/code&gt;，所以使用Ruby3时需要在Gemfile包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webrick&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem &quot;webrick&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Jekyll建站和Gem主题的使用</title><link href="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html" rel="alternate" type="text/html" title="Jekyll建站和Gem主题的使用" /><published>2020-08-30T23:11:04+08:00</published><updated>2020-08-30T23:11:04+08:00</updated><id>http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme</id><content type="html" xml:base="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+
+&lt;p&gt;Jekyll是一个Ruby语言编写的博客类网站的骨架，支持直接使用markdown代码编写页面。我是在Github Pages上建的blog。因为GP支持Jekyll站点的自动编译，如果使用的是GP，那么用Jekyll建站可以不用考虑环境的问题。&lt;/p&gt;
+
+&lt;p&gt;由于Jekyll是基于Ruby的，可以在本地搭建Ruby的环境，这样就可以在本地做好页面的调试，部署在GP的Jekyll站点是难以在线调试的。配置Ruby环境最好选择LINUX，这样可以方便快速地配置环境，Windows用户可以在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wsl&lt;/code&gt;上操作。下面叙述Debian LINUX下搭建环境的过程。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;安装Ruby和编译环境&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt install ruby ruby-dev make gcc g++ bundler
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;安装Jekyll&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;可以选择先切换gem和bundler的安装源为国内源，这样会大大加快安装速度。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem install jekyll
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;环境搭建好时，建立一个Jekyll工程只需使用以下命令：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jekyll new [工程名称]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这句命令会在当前目录下创建一个以工程名称命名的工程目录，然后在文件夹里添加Jekyll网站的整个框架。现在测试一下网站是否可以运行。运行Jekyll网站可以直接在&lt;strong&gt;工程目录&lt;/strong&gt;下执行以下命令。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle exec jekyll serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;等待网站的编译。如果程序没有报错退出，说明编译成功，然后就可以在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;查看网站的运行情况了。&lt;/p&gt;
+
+&lt;p&gt;最后需要对&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;和页面进行配置，把信息改成自己的。&lt;/p&gt;
+
+&lt;p&gt;这时，网站已经可以使用和部署了，Jekyll的主题默认使用了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minima&lt;/code&gt;。这个主题虽然简单，但是功能齐全，足够使用。我个人看到Github里上挂了很好看的主题，于是尝试配置了一下。使用主题有两种方式：&lt;/p&gt;
+
+&lt;p&gt;一种方式是直接把主题的工程clone下来，然后手动修改配置，这种方法非常简单迅速，甚至可以在没有环境时完成对站点的配置。&lt;/p&gt;
+
+&lt;p&gt;另一种方式是使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;引用主题的gem包，这种方法缺点非常明显。主题的gem包把配置文件全都封装进去，可配置的文件仅限于&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;和页面，这样就难以自己修改可复用元素的样式。
+但是使用这种方式，工程文件夹里只有有限的内容与相应主题相关，这让我可以迅速在不同主题之间迁移；相应地，在主题可以升级时只需执行升级命令，不用处理很多文件；
+这样还能减少工程目录的文件数目。&lt;/p&gt;
+
+&lt;p&gt;使用gem格式的主题，首先要在Github上找到一个想要使用的主题项目，在项目页面上找到&lt;strong&gt;主题的gem&lt;/strong&gt;。第二步是把主题添加到配置里，需要修改的是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Gemfile
+gem &quot;[gem名字]&quot;
+
+# _config.yml
+theme: [gem名字]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在工程目录执行命令来安装主题&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后就可以参考&lt;strong&gt;对应主题&lt;/strong&gt;工程页面上的方法对主题进行配置，每种主题的配置方法&lt;strong&gt;各不相同&lt;/strong&gt;，需要仔细阅读配置方法，必要时阅读工程源文件。&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include &quot;stdio.h&quot;
+&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;中文文字显示&lt;/p&gt;
+
+&lt;p&gt;Roman alphabet display&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-08-15T21:34:40+08:00</published><updated>2020-08-15T21:34:40+08:00</updated><id>http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>cainslayer</name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
