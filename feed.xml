@@ -1,4 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-28T12:01:51+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件</title><link href="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" rel="alternate" type="text/html" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件" /><published>2020-09-04T11:31:31+08:00</published><updated>2020-09-04T11:31:31+08:00</updated><id>http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress</id><content type="html" xml:base="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-07-06T21:52:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">在Termux环境下执行VSCode与调试java程序</title><link href="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html" rel="alternate" type="text/html" title="在Termux环境下执行VSCode与调试java程序" /><published>2021-07-06T21:46:51+08:00</published><updated>2021-07-06T21:46:51+08:00</updated><id>http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux</id><content type="html" xml:base="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+
+&lt;h2 id=&quot;建立运行环境&quot;&gt;建立运行环境&lt;/h2&gt;
+
+&lt;p&gt;欲在Termux中直接安装VSCode，必须在Termux中编译VSCode。因为Termux的路径特殊于通常Linux（即使它支持apt），故其它发行版本的可执行文件不能从相应路径调用所需的库。如果想直接使用官方提供的VSCode，就需要提供一个常见Linux发行版的环境。幸运的是，通过proot或chroot程序修改当前根目录，可以在终端模拟一个Linux发行版，并且可以在这个环境中使用Linux的路径访问文件。所以这个环境可以直接运行对应发行版上编译的程序。&lt;/p&gt;
+
+&lt;h3 id=&quot;使用atilo安装fedora&quot;&gt;使用Atilo安装Fedora&lt;/h3&gt;
+
+&lt;p&gt;Atilo是一个用于在Termux安装Linux发行版的工具，它采用了proot。安装Atilo可以使用仓库中推荐的方式，在apt软件列表添加Atilo的源&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;deb [trusted=yes arch=all] https://yadominjinta.github.io/files/ termux extras&quot; &amp;gt;&amp;gt; $PREFIX/etc/apt/sources.list.d/atilo.list
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;更新apt缓存后，就可以通过apt获取Atilo&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt install atilo-cn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;由于未能在其它发行版中部署成功，故本文选择在Fedora中实行。Atilo中安装Linux发行版，只需&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;atilo pull fedora
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后运行Fedora&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;atilo run fedora
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这时可以调整Fedora的软件源镜像，再根据需要安装软件。&lt;/p&gt;
+
+&lt;h3 id=&quot;在fedora安装图形界面&quot;&gt;在Fedora安装图形界面&lt;/h3&gt;
+
+&lt;p&gt;可以按照个人喜好选择xfce或lxde，现使用xfce4。在Fedora安装xfce4，只需通过包管理工具搜索对应分组&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo dnf group search desktop&lt;/code&gt;，然后再进行安装&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo dnf group install &quot;Xfce Desktop&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Termux没有内置Xorg服务器，在安卓系统可以通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XServer XSDL&lt;/code&gt;来运行XServer环境。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XServer XSDL&lt;/code&gt;执行后，就会监听对应XServer的端口。&lt;/p&gt;
+
+&lt;p&gt;可以根据软件的提示，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.bashrc&lt;/code&gt;中配置XServer的地址，添加&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export DISPLAY=[XServer的IP]:[XServer的编号]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;实际操作中，即使XServer在本地，在省略IP地址时也未能访问XServer，故不省略&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;重启proot后就可以运行图形界面了&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;startxfce4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;实际操作中，使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;startx&lt;/code&gt;未能成功启动图形界面&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;在fedora安装vscode&quot;&gt;在Fedora安装VSCode&lt;/h2&gt;
+
+&lt;p&gt;首先需要选择合适的版本，幸运地，VSCode官方提供了aarch64的rpm package，直接从官网上下载即可。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;将网址替换成azure的本国镜像可提高下载速度。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;下载完成后，使用yum安装&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install code-[...].rpm 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;可以在xfce4的菜单中直接启动VSCode。&lt;/p&gt;
+
+&lt;p&gt;如果未能启动成功，且日志里包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shm&lt;/code&gt;相关的错误，那这可能与&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev&lt;/code&gt;的挂载有关，那么就在启动选项中加入参数&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--disable-dev-shm-usage&lt;/code&gt;以禁用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/shm&lt;/code&gt;。可以直接找到对应菜单项的启动文件进行添加，或新建一个启动文件。&lt;/p&gt;
+
+&lt;h2 id=&quot;在fedora中调试java&quot;&gt;在Fedora中调试Java&lt;/h2&gt;
+
+&lt;p&gt;首先安装JDK，其次配置VSCode。&lt;/p&gt;
+
+&lt;h3 id=&quot;安装maven和jdk&quot;&gt;安装maven和JDK&lt;/h3&gt;
+
+&lt;p&gt;maven是一个Java的工程管理工具，欲在Fedora安装maven，只需&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dnf install maven
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;一般情况下，包管理工具也会自动安装合适版本的JDK。之后可以手动安装需要的JDK版本。&lt;/p&gt;
+
+&lt;h3 id=&quot;配置vscode&quot;&gt;配置VSCode&lt;/h3&gt;
+
+&lt;p&gt;这一步与桌面平台的配置基本无异，安装&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Java Extension Pack&lt;/code&gt;即可。需要注意的是，应当在设置中配置maven配置文件和maven可执行文件的路径，否则会识别不出。可以给maven配置镜像。&lt;/p&gt;
+
+&lt;p&gt;如果想使用Spring Boot，只需安装&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Spring Boot Extension Pack&lt;/code&gt;。可以直接在宿主中的浏览器访问服务器，不必在proot环境中安装浏览器。&lt;/p&gt;
+
+&lt;p&gt;因为Atilo建立的环境与真实的Linux基本一致，所以它可以胜任多数情况下的Java开发。&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件</title><link href="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" rel="alternate" type="text/html" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件" /><published>2020-09-04T11:31:31+08:00</published><updated>2020-09-04T11:31:31+08:00</updated><id>http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress</id><content type="html" xml:base="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
 
 &lt;h2 id=&quot;octopress的集成&quot;&gt;Octopress的集成&lt;/h2&gt;
 
