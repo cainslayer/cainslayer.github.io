@@ -1,344 +1,423 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-07-06T21:52:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">在Termux环境下执行VSCode与调试java程序</title><link href="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html" rel="alternate" type="text/html" title="在Termux环境下执行VSCode与调试java程序" /><published>2021-07-06T21:46:51+08:00</published><updated>2021-07-06T21:46:51+08:00</updated><id>http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux</id><content type="html" xml:base="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-01-12T23:35:13+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作</title><link href="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html" rel="alternate" type="text/html" title="配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作" /><published>2022-01-12T21:52:32+08:00</published><updated>2022-01-12T21:52:32+08:00</updated><id>http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android</id><content type="html" xml:base="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
-&lt;h2 id=&quot;建立运行环境&quot;&gt;建立运行环境&lt;/h2&gt;
+<h2 id="前提">前提</h2>
 
-&lt;p&gt;欲在Termux中直接安装VSCode，必须在Termux中编译VSCode。因为Termux的路径特殊于通常Linux（即使它支持apt），故其它发行版本的可执行文件不能从相应路径调用所需的库。如果想直接使用官方提供的VSCode，就需要提供一个常见Linux发行版的环境。幸运的是，通过proot或chroot程序修改当前根目录，可以在终端模拟一个Linux发行版，并且可以在这个环境中使用Linux的路径访问文件。所以这个环境可以直接运行对应发行版上编译的程序。&lt;/p&gt;
+<blockquote>
+  <p>带有引用标识的知识均来自<strong>其他文章</strong>。</p>
+</blockquote>
 
-&lt;h3 id=&quot;使用atilo安装fedora&quot;&gt;使用Atilo安装Fedora&lt;/h3&gt;
+<h3 id="android手机执行东方project旧作的可能性">Android手机执行东方Project“旧作”的可能性</h3>
 
-&lt;p&gt;Atilo是一个用于在Termux安装Linux发行版的工具，它采用了proot。安装Atilo可以使用仓库中推荐的方式，在apt软件列表添加Atilo的源&lt;/p&gt;
+<p>“旧作”的目标机器是PC-98(80386)，RetroArch提供PC-98的模拟器，且模拟器在Android上原生执行，而PC-98需要的资源很小，故“旧作”可以在Android系统中高效执行。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;deb [trusted=yes arch=all] https://yadominjinta.github.io/files/ termux extras&quot; &amp;gt;&amp;gt; $PREFIX/etc/apt/sources.list.d/atilo.list
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>RetroArch支持键盘输入，也支持横屏显示，基本满足游戏需要。</p>
 
-&lt;p&gt;更新apt缓存后，就可以通过apt获取Atilo&lt;/p&gt;
+<h3 id="关于旧作的压缩包">关于“旧作”的压缩包</h3>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt install atilo-cn
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>从互联网上下载的压缩包一般包含anex86（模拟器）和游戏的数据，由于使用RetroArch来模拟PC-98的环境，故只需关注<strong>无关于模拟器</strong>的数据。</p>
 
-&lt;p&gt;由于未能在其它发行版中部署成功，故本文选择在Fedora中实行。Atilo中安装Linux发行版，只需&lt;/p&gt;
+<p>游戏的数据分为两个文件：</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;atilo pull fedora
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<ul>
+  <li>字库(.bmp)</li>
+  <li>存放游戏的磁盘映像(.hdi)</li>
+</ul>
 
-&lt;p&gt;然后运行Fedora&lt;/p&gt;
+<p>从RetroArch拉取的模拟器的字库与游戏不兼容，故<strong>需要导入字库</strong>。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;atilo run fedora
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>磁盘映像中建立了操作环境，故无需额外程序就可以引导。</p>
 
-&lt;p&gt;这时可以调整Fedora的软件源镜像，再根据需要安装软件。&lt;/p&gt;
+<h3 id="关于retroarch">关于RetroArch</h3>
 
-&lt;h3 id=&quot;在fedora安装图形界面&quot;&gt;在Fedora安装图形界面&lt;/h3&gt;
+<p>RetroArch打开后如果乱码（显示？？？），说明它可能不支持中文字库，可以清除数据，切换系统语言为English再进入。</p>
 
-&lt;p&gt;可以按照个人喜好选择xfce或lxde，现使用xfce4。在Fedora安装xfce4，只需通过包管理工具搜索对应分组&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo dnf group search desktop&lt;/code&gt;，然后再进行安装&lt;/p&gt;
+<p>RetroArch的不同版本具有差别，本文描述的RetroArch的版本为<strong>1.9.0</strong>。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo dnf group install &quot;Xfce Desktop&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h2 id="从retroarch执行东方project旧作">从RetroArch执行东方Project“旧作”</h2>
 
-&lt;p&gt;Termux没有内置Xorg服务器，在安卓系统可以通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XServer XSDL&lt;/code&gt;来运行XServer环境。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;XServer XSDL&lt;/code&gt;执行后，就会监听对应XServer的端口。&lt;/p&gt;
+<p>以下叙述运行游戏的方法。</p>
 
-&lt;p&gt;可以根据软件的提示，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.bashrc&lt;/code&gt;中配置XServer的地址，添加&lt;/p&gt;
+<h3 id="建立pc-98环境">建立PC-98环境</h3>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export DISPLAY=[XServer的IP]:[XServer的编号]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>首先进入<code class="language-plaintext highlighter-rouge">Load Core</code>，<code class="language-plaintext highlighter-rouge">Download a Core</code>，下载<code class="language-plaintext highlighter-rouge">NEC - PC-98</code>，然后再选择它。</p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;实际操作中，即使XServer在本地，在省略IP地址时也未能访问XServer，故不省略&lt;/p&gt;
-&lt;/blockquote&gt;
+<blockquote>
+  <p>这里需要选用<code class="language-plaintext highlighter-rouge">Neko Project II Kai</code>版本，它具有更多的配置项。</p>
+</blockquote>
 
-&lt;p&gt;重启proot后就可以运行图形界面了&lt;/p&gt;
+<p>其次进入<code class="language-plaintext highlighter-rouge">Load Content</code>，选择游戏数据（.hdi文件），此时启动模拟器，显示一个选择界面，但字符的显示是不正常的，也无法操作。此时退出模拟器（有个机器人的button可以进入<code class="language-plaintext highlighter-rouge">Quick Menu</code>）。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;startxfce4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<blockquote>
+  <p>在根目录（一般是<code class="language-plaintext highlighter-rouge">/sdcard</code>）下的<code class="language-plaintext highlighter-rouge">RetroArch/system</code>的文件夹中建立一个<code class="language-plaintext highlighter-rouge">np2kai</code>文件夹，把字库（文件名需改为<code class="language-plaintext highlighter-rouge">font.bmp</code>）放进去，就可以导入字库。</p>
+</blockquote>
 
-&lt;blockquote&gt;
-  &lt;p&gt;实际操作中，使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;startx&lt;/code&gt;未能成功启动图形界面&lt;/p&gt;
-&lt;/blockquote&gt;
+<blockquote>
+  <p>打开游戏后，会发现屏幕上的按键失灵，这时进入<code class="language-plaintext highlighter-rouge">Quick Menu</code>，<code class="language-plaintext highlighter-rouge">Options</code>，把<code class="language-plaintext highlighter-rouge">Joypad D-pad to Mouse/Keyboard/Joypad Mapping</code>改为<code class="language-plaintext highlighter-rouge">Manual Keyboard</code>即可（原理不明）。</p>
+</blockquote>
 
-&lt;h2 id=&quot;在fedora安装vscode&quot;&gt;在Fedora安装VSCode&lt;/h2&gt;
+<h3 id="虚拟机配置的选用">虚拟机配置的选用</h3>
 
-&lt;p&gt;首先需要选择合适的版本，幸运地，VSCode官方提供了aarch64的rpm package，直接从官网上下载即可。&lt;/p&gt;
+<p>默认的虚拟机配置较低，无法流畅运行游戏，需要进入<code class="language-plaintext highlighter-rouge">Quick Menu</code>，<code class="language-plaintext highlighter-rouge">Options</code>调节。</p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;将网址替换成azure的本国镜像可提高下载速度。&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>首先调节CPU的<strong>倍频</strong><code class="language-plaintext highlighter-rouge">CPU Clock Multiplier</code>，默认是4，加到8后卡顿改善，加<strong>16以上</strong>比较理想。</p>
 
-&lt;p&gt;下载完成后，使用yum安装&lt;/p&gt;
+<p>其次关于内存，尝试加到7以后并没有显著提升。但随着内存的增加，可以感觉到进入游戏的时间显著增加。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum install code-[...].rpm 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h2 id="体验优化">体验优化</h2>
 
-&lt;p&gt;可以在xfce4的菜单中直接启动VSCode。&lt;/p&gt;
+<p>通过实体键盘和横屏改善游戏体验。</p>
 
-&lt;p&gt;如果未能启动成功，且日志里包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shm&lt;/code&gt;相关的错误，那这可能与&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev&lt;/code&gt;的挂载有关，那么就在启动选项中加入参数&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--disable-dev-shm-usage&lt;/code&gt;以禁用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/shm&lt;/code&gt;。可以直接找到对应菜单项的启动文件进行添加，或新建一个启动文件。&lt;/p&gt;
+<h3 id="使用键盘操作">使用键盘操作</h3>
 
-&lt;h2 id=&quot;在fedora中调试java&quot;&gt;在Fedora中调试Java&lt;/h2&gt;
+<p>使用键盘在RetroArch上操作，需要配置键映射。在未运行游戏实例时进入设置，选择<code class="language-plaintext highlighter-rouge">Input</code>，进入第一个输入<code class="language-plaintext highlighter-rouge">Port 1 Controls</code>。必须配置的键有B(z),A(x)和Up/Down/Left/Right，选择按键名称，在键盘上<strong>长按对应键</strong>完成绑定。</p>
 
-&lt;p&gt;首先安装JDK，其次配置VSCode。&lt;/p&gt;
+<h3 id="横屏显示">横屏显示</h3>
 
-&lt;h3 id=&quot;安装maven和jdk&quot;&gt;安装maven和JDK&lt;/h3&gt;
+<blockquote>
+  <p>RetroArch原生支持横屏显示</p>
+</blockquote>
 
-&lt;p&gt;maven是一个Java的工程管理工具，欲在Fedora安装maven，只需&lt;/p&gt;
+<p>通过设置系统自动旋转屏幕，或使用控制屏幕旋转的工具软件来实现横屏。</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">在Termux环境下执行VSCode与调试java程序</title><link href="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html" rel="alternate" type="text/html" title="在Termux环境下执行VSCode与调试java程序" /><published>2021-07-06T21:46:51+08:00</published><updated>2021-07-06T21:46:51+08:00</updated><id>http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux</id><content type="html" xml:base="http://localhost:4000/2021/07/06/execute-vscode-and-debug-java-program-in-termux.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dnf install maven
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h2 id="建立运行环境">建立运行环境</h2>
 
-&lt;p&gt;一般情况下，包管理工具也会自动安装合适版本的JDK。之后可以手动安装需要的JDK版本。&lt;/p&gt;
+<p>欲在Termux中直接安装VSCode，必须在Termux中编译VSCode。因为Termux的路径特殊于通常Linux（即使它支持apt），故其它发行版本的可执行文件不能从相应路径调用所需的库。如果想直接使用官方提供的VSCode，就需要提供一个常见Linux发行版的环境。幸运的是，通过proot或chroot程序修改当前根目录，可以在终端模拟一个Linux发行版，并且可以在这个环境中使用Linux的路径访问文件。所以这个环境可以直接运行对应发行版上编译的程序。</p>
 
-&lt;h3 id=&quot;配置vscode&quot;&gt;配置VSCode&lt;/h3&gt;
+<h3 id="使用atilo安装fedora">使用Atilo安装Fedora</h3>
 
-&lt;p&gt;这一步与桌面平台的配置基本无异，安装&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Java Extension Pack&lt;/code&gt;即可。需要注意的是，应当在设置中配置maven配置文件和maven可执行文件的路径，否则会识别不出。可以给maven配置镜像。&lt;/p&gt;
+<p>Atilo是一个用于在Termux安装Linux发行版的工具，它采用了proot。安装Atilo可以使用仓库中推荐的方式，在apt软件列表添加Atilo的源</p>
 
-&lt;p&gt;如果想使用Spring Boot，只需安装&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Spring Boot Extension Pack&lt;/code&gt;。可以直接在宿主中的浏览器访问服务器，不必在proot环境中安装浏览器。&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "deb [trusted=yes arch=all] https://yadominjinta.github.io/files/ termux extras" &gt;&gt; $PREFIX/etc/apt/sources.list.d/atilo.list
+</code></pre></div></div>
 
-&lt;p&gt;因为Atilo建立的环境与真实的Linux基本一致，所以它可以胜任多数情况下的Java开发。&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件</title><link href="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" rel="alternate" type="text/html" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件" /><published>2020-09-04T11:31:31+08:00</published><updated>2020-09-04T11:31:31+08:00</updated><id>http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress</id><content type="html" xml:base="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<p>更新apt缓存后，就可以通过apt获取Atilo</p>
 
-&lt;h2 id=&quot;octopress的集成&quot;&gt;Octopress的集成&lt;/h2&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt install atilo-cn
+</code></pre></div></div>
 
-&lt;p&gt;Octopress插件为Jekyll的功能提供了扩展。它的主要功能是为blog的撰写和网站的发布提供一些CLI命令，简化这些过程。首先需要在gem里安装octopress。&lt;/p&gt;
+<p>由于未能在其它发行版中部署成功，故本文选择在Fedora中实行。Atilo中安装Linux发行版，只需</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem install octopress
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>atilo pull fedora
+</code></pre></div></div>
 
-&lt;p&gt;在Jekyll里集成octopress，官方给的方法是直接通过Gemfile把octopress的gem集成进去，就是在Gemfile里添加&lt;/p&gt;
+<p>然后运行Fedora</p>
 
-&lt;p&gt;&lt;del&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem &apos;octopress&apos;&lt;/code&gt;&lt;/del&gt;&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>atilo run fedora
+</code></pre></div></div>
 
-&lt;p&gt;我在使用这种方法时，运行&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle install&lt;/code&gt;后dependency报错，前提是使用了jekyll命令来初始化工程。如果使用了octopress命令来初始化工程，则没有出现依赖问题。那么，如果确定要集成octopress，最好使用octopress命令来建立工程&lt;/p&gt;
+<p>这时可以调整Fedora的软件源镜像，再根据需要安装软件。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress new [工程名字]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<h3 id="在fedora安装图形界面">在Fedora安装图形界面</h3>
 
-&lt;h2 id=&quot;octopress的使用&quot;&gt;Octopress的使用&lt;/h2&gt;
+<p>可以按照个人喜好选择xfce或lxde，现使用xfce4。在Fedora安装xfce4，只需通过包管理工具搜索对应分组<code class="language-plaintext highlighter-rouge">sudo dnf group search desktop</code>，然后再进行安装</p>
 
-&lt;p&gt;在集成octopress以后。就可以通过octopress的CLI命令来管理jekyll的文章。&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dnf group install "Xfce Desktop"
+</code></pre></div></div>
 
-&lt;h3 id=&quot;octopress-init&quot;&gt;octopress init&lt;/h3&gt;
+<p>Termux没有内置Xorg服务器，在安卓系统可以通过<code class="language-plaintext highlighter-rouge">XServer XSDL</code>来运行XServer环境。<code class="language-plaintext highlighter-rouge">XServer XSDL</code>执行后，就会监听对应XServer的端口。</p>
 
-&lt;p&gt;这个操作会在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/_templates&lt;/code&gt;目录下创建模板，当调用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;octopress new [页面模板]&lt;/code&gt;时会自动套用相应名称的模板。可以修改对应的模板文件，使得建立对应种类文章时自动添加模板的内容。&lt;/p&gt;
+<p>可以根据软件的提示，在<code class="language-plaintext highlighter-rouge">.bashrc</code>中配置XServer的地址，添加</p>
 
-&lt;h3 id=&quot;octopress-new-工程名&quot;&gt;octopress new [工程名]&lt;/h3&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export DISPLAY=[XServer的IP]:[XServer的编号]
+</code></pre></div></div>
 
-&lt;p&gt;等同于先使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll new&lt;/code&gt;建立一个工程，然后在工程目录下执行&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;octopress init&lt;/code&gt;。建议使用。&lt;/p&gt;
+<blockquote>
+  <p>实际操作中，即使XServer在本地，在省略IP地址时也未能访问XServer，故不省略</p>
+</blockquote>
 
-&lt;h3 id=&quot;octopress-new-页面模板-名称&quot;&gt;octopress new [页面模板] [名称]&lt;/h3&gt;
+<p>重启proot后就可以运行图形界面了</p>
 
-&lt;p&gt;使用对应页面模板创建文章，可用的模板有&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>startxfce4
+</code></pre></div></div>
 
-&lt;ul&gt;
-  &lt;li&gt;post 在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt;目录建立一篇文章&lt;/li&gt;
-  &lt;li&gt;page 在根目录建立一个页面&lt;/li&gt;
-  &lt;li&gt;draft 在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_draft&lt;/code&gt;目录建立一篇草稿，草稿不会被编译&lt;/li&gt;
-&lt;/ul&gt;
+<blockquote>
+  <p>实际操作中，使用<code class="language-plaintext highlighter-rouge">startx</code>未能成功启动图形界面</p>
+</blockquote>
 
-&lt;p&gt;可以建立模板文件，但只能通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--template&lt;/code&gt;参数指定使用的模板。&lt;/p&gt;
+<h2 id="在fedora安装vscode">在Fedora安装VSCode</h2>
 
-&lt;h3 id=&quot;octopress-publish-草稿--unpublish-文章&quot;&gt;octopress publish [草稿] / unpublish [文章]&lt;/h3&gt;
+<p>首先需要选择合适的版本，幸运地，VSCode官方提供了aarch64的rpm package，直接从官网上下载即可。</p>
 
-&lt;p&gt;publish作用是把草稿转化为文章，unpublish把文章转化为草稿。如果传入参数是关键词而不是文件名，就应用到所有包含关键词的页。&lt;/p&gt;
+<blockquote>
+  <p>将网址替换成azure的本国镜像可提高下载速度。</p>
+</blockquote>
 
-&lt;h3 id=&quot;octopress-deploy&quot;&gt;octopress deploy&lt;/h3&gt;
+<p>下载完成后，使用yum安装</p>
 
-&lt;p&gt;octopress支持部署功能，此功能先在本地生成静态页面，然后通过配置文件，将网站部署到对应平台上。&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum install code-[...].rpm 
+</code></pre></div></div>
 
-&lt;p&gt;我通过它把网站部署在GitHub Pages。首先建立配置文件&lt;/p&gt;
+<p>可以在xfce4的菜单中直接启动VSCode。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress deploy init git git@github.com:[用户名]/[Github Pages仓库]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>如果未能启动成功，且日志里包含<code class="language-plaintext highlighter-rouge">shm</code>相关的错误，那这可能与<code class="language-plaintext highlighter-rouge">/dev</code>的挂载有关，那么就在启动选项中加入参数<code class="language-plaintext highlighter-rouge">--disable-dev-shm-usage</code>以禁用<code class="language-plaintext highlighter-rouge">/dev/shm</code>。可以直接找到对应菜单项的启动文件进行添加，或新建一个启动文件。</p>
 
-&lt;p&gt;这样会建立一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt;文件，可以进一步调整部署的配置。&lt;/p&gt;
+<h2 id="在fedora中调试java">在Fedora中调试Java</h2>
 
-&lt;blockquote&gt;
-  &lt;p&gt;应当在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;屏蔽&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deploy&lt;/code&gt;，而且建议屏蔽&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_drafts&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile.lock&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>首先安装JDK，其次配置VSCode。</p>
 
-&lt;p&gt;然后可以直接部署网站&lt;/p&gt;
+<h3 id="安装maven和jdk">安装maven和JDK</h3>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress deploy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<p>maven是一个Java的工程管理工具，欲在Fedora安装maven，只需</p>
 
-&lt;h2 id=&quot;startbootstrap-clean-blog-jekyll主题的集成&quot;&gt;Startbootstrap-clean-blog-jekyll主题的集成&lt;/h2&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dnf install maven
+</code></pre></div></div>
 
-&lt;p&gt;在jekyll中使用自定义主题，首先要将主题引入&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;，然后在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中设置主题。此时如果执行编译，就可以在工程中应用主题。&lt;/p&gt;
+<p>一般情况下，包管理工具也会自动安装合适版本的JDK。之后可以手动安装需要的JDK版本。</p>
 
-&lt;p&gt;为了提高主题的可配置性，主题的不会提供所有的文件，这时应当参考主题对应仓库中的文档添加和配置这些页面。在使用主题时，也需参照文档，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中对主题的参数进行配置。&lt;/p&gt;
+<h3 id="配置vscode">配置VSCode</h3>
 
-&lt;h3 id=&quot;为startbootstrap-clean-blog-jekyll添加页面&quot;&gt;为startbootstrap-clean-blog-jekyll添加页面&lt;/h3&gt;
+<p>这一步与桌面平台的配置基本无异，安装<code class="language-plaintext highlighter-rouge">Java Extension Pack</code>即可。需要注意的是，应当在设置中配置maven配置文件和maven可执行文件的路径，否则会识别不出。可以给maven配置镜像。</p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;不同主题包的作者会根据需要，选择将一部分页面不包含在主题包中，而是让用户自己建立相应页面。这样做虽然大大增加了主题的可定制度，但是提高了主题的使用门槛。如果页面可定制的内容少，可以选择从&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;中读取。&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>如果想使用Spring Boot，只需安装<code class="language-plaintext highlighter-rouge">Spring Boot Extension Pack</code>。可以直接在宿主中的浏览器访问服务器，不必在proot环境中安装浏览器。</p>
 
-&lt;p&gt;startbootstrap-clean-blog-jekyll主题需要用户定义这几个页面&lt;/p&gt;
+<p>因为Atilo建立的环境与真实的Linux基本一致，所以它可以胜任多数情况下的Java开发。</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件</title><link href="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html" rel="alternate" type="text/html" title="给Jekyll网站添加Startbootstrap-clean-blog-jekyll主题和Octopress插件" /><published>2020-09-04T11:31:31+08:00</published><updated>2020-09-04T11:31:31+08:00</updated><id>http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress</id><content type="html" xml:base="http://localhost:4000/2020/09/04/integrate-startbootstrap-clean-blog-jekyll-and-octopress.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;index.html&lt;/code&gt; 主页&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;about.html&lt;/code&gt; about页&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;contact.html&lt;/code&gt; contact页&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;posts/index.html&lt;/code&gt; 文章列表页&lt;/li&gt;
-&lt;/ul&gt;
+<h2 id="octopress的集成">Octopress的集成</h2>
 
-&lt;p&gt;需要根据主题文档中的相应部分描述对相应的页面进行配置。也可以直接复制样例的页面内容，但是需要根据实际情况去除或修改不兼容的代码。&lt;/p&gt;
+<p>Octopress插件为Jekyll的功能提供了扩展。它的主要功能是为blog的撰写和网站的发布提供一些CLI命令，简化这些过程。首先需要在gem里安装octopress。</p>
 
-&lt;p&gt;可以配置模板头部的字段，修改&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;background&lt;/code&gt;字段可添加背景图片的url。&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install octopress
+</code></pre></div></div>
 
-&lt;h3 id=&quot;解决语法高亮问题&quot;&gt;解决语法高亮问题&lt;/h3&gt;
+<p>在Jekyll里集成octopress，官方给的方法是直接通过Gemfile把octopress的gem集成进去，就是在Gemfile里添加</p>
 
-&lt;p&gt;startbootstrap-clean-blog-jekyll自带语法高亮插件，可以对页面上的代码进行高亮处理。从开发人员工具看到，页面上的代码已经进行了高亮标注，但对应标注的样式未包含css实现。&lt;/p&gt;
+<p><del><code class="language-plaintext highlighter-rouge">gem 'octopress'</code></del></p>
 
-&lt;p&gt;可以人为地加入缺失的标注，通过css的方式引入自己实现的css。参考github issues或一些blog的解决方案，再根据自身和实际情况，对css进行定制。&lt;/p&gt;
+<p>我在使用这种方法时，运行<code class="language-plaintext highlighter-rouge">bundle install</code>后dependency报错，前提是使用了jekyll命令来初始化工程。如果使用了octopress命令来初始化工程，则没有出现依赖问题。那么，如果确定要集成octopress，最好使用octopress命令来建立工程</p>
 
-&lt;p&gt;其次，startbootstrap-clean-blog-jekyll也不包含代码块边框的实现。与代码有关的css标签是pre和code，pre是跨行的代码块，code是行内和跨行共用的标签，需要借助一些技巧，这里从&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minima&lt;/code&gt;主题借鉴了了一些代码&lt;/p&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>octopress new [工程名字]
+</code></pre></div></div>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;c&quot;&gt;/* doc.css */&lt;/span&gt;
+<h2 id="octopress的使用">Octopress的使用</h2>
 
-&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&quot;highlight/friendly.css&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+<p>在集成octopress以后。就可以通过octopress的CLI命令来管理jekyll的文章。</p>
 
-&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;border&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;solid&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1px&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;border-radius&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<h3 id="octopress-init">octopress init</h3>
 
-&lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1px&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>这个操作会在<code class="language-plaintext highlighter-rouge">/_templates</code>目录下创建模板，当调用<code class="language-plaintext highlighter-rouge">octopress new [页面模板]</code>时会自动套用相应名称的模板。可以修改对应的模板文件，使得建立对应种类文章时自动添加模板的内容。</p>
 
-&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;8px&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;12px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;border-left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;solid&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3px&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;darkcyan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<h3 id="octopress-new-工程名">octopress new [工程名]</h3>
 
-&lt;span class=&quot;nt&quot;&gt;pre&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;border&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;padding-right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;padding-left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+<p>等同于先使用<code class="language-plaintext highlighter-rouge">jekyll new</code>建立一个工程，然后在工程目录下执行<code class="language-plaintext highlighter-rouge">octopress init</code>。建议使用。</p>
 
-&lt;span class=&quot;nt&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;nl&quot;&gt;font-family&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Lora&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Noto Sans SC&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&apos;Roboto&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sans-serif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<h3 id="octopress-new-页面模板-名称">octopress new [页面模板] [名称]</h3>
 
-&lt;blockquote&gt;
-  &lt;p&gt;参考Issues#138&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>使用对应页面模板创建文章，可用的模板有</p>
 
-&lt;p&gt;这里 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@import&lt;/code&gt; 的就是上文说到与语法高亮相关的css，可以从
-&lt;a href=&quot;https://github.com/iwootten/jekyll-syntax&quot;&gt;woottenn/jekyll-syntax&lt;/a&gt;
-仓库找到理想的高亮实现。&lt;/p&gt;
+<ul>
+  <li>post 在<code class="language-plaintext highlighter-rouge">_posts</code>目录建立一篇文章</li>
+  <li>page 在根目录建立一个页面</li>
+  <li>draft 在<code class="language-plaintext highlighter-rouge">_draft</code>目录建立一篇草稿，草稿不会被编译</li>
+</ul>
 
-&lt;p&gt;最后可以在每个需要代码的页面引入css，或直接在octopress的模板中引入，这样以后建立的页面都可以集成高亮的css。&lt;/p&gt;
+<p>可以建立模板文件，但只能通过<code class="language-plaintext highlighter-rouge">--template</code>参数指定使用的模板。</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/doc.css&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<h3 id="octopress-publish-草稿--unpublish-文章">octopress publish [草稿] / unpublish [文章]</h3>
 
-&lt;p&gt;使用高亮时，用liquid语法包含对应的代码块即可&lt;/p&gt;
+<p>publish作用是把草稿转化为文章，unpublish把文章转化为草稿。如果传入参数是关键词而不是文件名，就应用到所有包含关键词的页。</p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;使用时需要去除括号和百分号之间的空格&lt;/p&gt;
-&lt;/blockquote&gt;
+<h3 id="octopress-deploy">octopress deploy</h3>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{ % highlight ruby % }
+<p>octopress支持部署功能，此功能先在本地生成静态页面，然后通过配置文件，将网站部署到对应平台上。</p>
+
+<p>我通过它把网站部署在GitHub Pages。首先建立配置文件</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>octopress deploy init git git@github.com:[用户名]/[Github Pages仓库]
+</code></pre></div></div>
+
+<p>这样会建立一个<code class="language-plaintext highlighter-rouge">_deploy.yml</code>文件，可以进一步调整部署的配置。</p>
+
+<blockquote>
+  <p>应当在<code class="language-plaintext highlighter-rouge">.gitignore</code>屏蔽<code class="language-plaintext highlighter-rouge">_deploy.yml</code>和<code class="language-plaintext highlighter-rouge">.deploy</code>，而且建议屏蔽<code class="language-plaintext highlighter-rouge">_drafts</code>和<code class="language-plaintext highlighter-rouge">Gemfile.lock</code></p>
+</blockquote>
+
+<p>然后可以直接部署网站</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>octopress deploy
+</code></pre></div></div>
+
+<h2 id="startbootstrap-clean-blog-jekyll主题的集成">Startbootstrap-clean-blog-jekyll主题的集成</h2>
+
+<p>在jekyll中使用自定义主题，首先要将主题引入<code class="language-plaintext highlighter-rouge">Gemfile</code>，然后在<code class="language-plaintext highlighter-rouge">_config.yml</code>中设置主题。此时如果执行编译，就可以在工程中应用主题。</p>
+
+<p>为了提高主题的可配置性，主题的不会提供所有的文件，这时应当参考主题对应仓库中的文档添加和配置这些页面。在使用主题时，也需参照文档，在<code class="language-plaintext highlighter-rouge">_config.yml</code>中对主题的参数进行配置。</p>
+
+<h3 id="为startbootstrap-clean-blog-jekyll添加页面">为startbootstrap-clean-blog-jekyll添加页面</h3>
+
+<blockquote>
+  <p>不同主题包的作者会根据需要，选择将一部分页面不包含在主题包中，而是让用户自己建立相应页面。这样做虽然大大增加了主题的可定制度，但是提高了主题的使用门槛。如果页面可定制的内容少，可以选择从<code class="language-plaintext highlighter-rouge">_config.yml</code>中读取。</p>
+</blockquote>
+
+<p>startbootstrap-clean-blog-jekyll主题需要用户定义这几个页面</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">index.html</code> 主页</li>
+  <li><code class="language-plaintext highlighter-rouge">about.html</code> about页</li>
+  <li><code class="language-plaintext highlighter-rouge">contact.html</code> contact页</li>
+  <li><code class="language-plaintext highlighter-rouge">posts/index.html</code> 文章列表页</li>
+</ul>
+
+<p>需要根据主题文档中的相应部分描述对相应的页面进行配置。也可以直接复制样例的页面内容，但是需要根据实际情况去除或修改不兼容的代码。</p>
+
+<p>可以配置模板头部的字段，修改<code class="language-plaintext highlighter-rouge">background</code>字段可添加背景图片的url。</p>
+
+<h3 id="解决语法高亮问题">解决语法高亮问题</h3>
+
+<p>startbootstrap-clean-blog-jekyll自带语法高亮插件，可以对页面上的代码进行高亮处理。从开发人员工具看到，页面上的代码已经进行了高亮标注，但对应标注的样式未包含css实现。</p>
+
+<p>可以人为地加入缺失的标注，通过css的方式引入自己实现的css。参考github issues或一些blog的解决方案，再根据自身和实际情况，对css进行定制。</p>
+
+<p>其次，startbootstrap-clean-blog-jekyll也不包含代码块边框的实现。与代码有关的css标签是pre和code，pre是跨行的代码块，code是行内和跨行共用的标签，需要借助一些技巧，这里从<code class="language-plaintext highlighter-rouge">minima</code>主题借鉴了了一些代码</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="c">/* doc.css */</span>
+
+<span class="k">@import</span> <span class="s1">"highlight/friendly.css"</span><span class="p">;</span>
+
+<span class="nt">pre</span><span class="o">,</span> <span class="nt">code</span> <span class="p">{</span>
+	<span class="nl">border</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">1px</span> <span class="n">grey</span><span class="p">;</span>
+	<span class="nl">border-radius</span><span class="p">:</span> <span class="m">3px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">code</span> <span class="p">{</span>
+	<span class="nl">padding</span><span class="p">:</span> <span class="m">1px</span> <span class="m">5px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">pre</span> <span class="p">{</span>
+	<span class="nl">padding</span><span class="p">:</span> <span class="m">8px</span> <span class="m">12px</span><span class="p">;</span>
+	<span class="nl">border-left</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">3px</span> <span class="no">darkcyan</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">pre</span> <span class="o">&gt;</span> <span class="nt">code</span> <span class="p">{</span>
+	<span class="nl">border</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+	<span class="nl">padding-right</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+	<span class="nl">padding-left</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">p</span> <span class="p">{</span>
+	<span class="nl">font-family</span><span class="p">:</span> <span class="s2">'Lora'</span><span class="p">,</span> <span class="s2">'Noto Sans SC'</span><span class="p">,</span> <span class="s2">'Roboto'</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>参考Issues#138</p>
+</blockquote>
+
+<p>这里 <code class="language-plaintext highlighter-rouge">@import</code> 的就是上文说到与语法高亮相关的css，可以从
+<a href="https://github.com/iwootten/jekyll-syntax">woottenn/jekyll-syntax</a>
+仓库找到理想的高亮实现。</p>
+
+<p>最后可以在每个需要代码的页面引入css，或直接在octopress的模板中引入，这样以后建立的页面都可以集成高亮的css。</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"/doc.css"</span><span class="nt">&gt;</span></code></pre></figure>
+
+<p>使用高亮时，用liquid语法包含对应的代码块即可</p>
+
+<blockquote>
+  <p>使用时需要去除括号和百分号之间的空格</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ % highlight ruby % }
     // Insert Code Here
 { % endhighlight % }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</code></pre></div></div>
 
-&lt;h3 id=&quot;配置paginate&quot;&gt;配置paginate&lt;/h3&gt;
+<h3 id="配置paginate">配置paginate</h3>
 
-&lt;p&gt;startbootstrap-clean-blog-jekyll集成了paginate插件，来实现文章列表页的分页功能。&lt;/p&gt;
+<p>startbootstrap-clean-blog-jekyll集成了paginate插件，来实现文章列表页的分页功能。</p>
 
-&lt;p&gt;需要在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;配置paginate。
-在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;paginate&lt;/code&gt;配置每页文章数，在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;paginate_path&lt;/code&gt;配置文章列表的api地址，再引入&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll-feed&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll-paginate&lt;/code&gt;插件。&lt;/p&gt;
+<p>需要在<code class="language-plaintext highlighter-rouge">_config.yml</code>配置paginate。
+在<code class="language-plaintext highlighter-rouge">paginate</code>配置每页文章数，在<code class="language-plaintext highlighter-rouge">paginate_path</code>配置文章列表的api地址，再引入<code class="language-plaintext highlighter-rouge">jekyll-feed</code>和<code class="language-plaintext highlighter-rouge">jekyll-paginate</code>插件。</p>
 
-&lt;h3 id=&quot;其他事项&quot;&gt;其他事项&lt;/h3&gt;
+<h3 id="其他事项">其他事项</h3>
 
-&lt;p&gt;Ruby3默认不包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webrick&lt;/code&gt;，所以使用Ruby3时需要在Gemfile包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webrick&lt;/code&gt;。&lt;/p&gt;
+<p>Ruby3默认不包含<code class="language-plaintext highlighter-rouge">webrick</code>，所以使用Ruby3时需要在Gemfile包含<code class="language-plaintext highlighter-rouge">webrick</code>。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem &quot;webrick&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Jekyll建站和Gem主题的使用</title><link href="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html" rel="alternate" type="text/html" title="Jekyll建站和Gem主题的使用" /><published>2020-08-30T23:11:04+08:00</published><updated>2020-08-30T23:11:04+08:00</updated><id>http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme</id><content type="html" xml:base="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem "webrick"
+</code></pre></div></div>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Jekyll建站和Gem主题的使用</title><link href="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html" rel="alternate" type="text/html" title="Jekyll建站和Gem主题的使用" /><published>2020-08-30T23:11:04+08:00</published><updated>2020-08-30T23:11:04+08:00</updated><id>http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme</id><content type="html" xml:base="http://localhost:4000/2020/08/30/construct-jekyll-site-with-theme.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
-&lt;p&gt;Jekyll是一个Ruby语言编写的博客类网站的骨架，支持直接使用markdown代码编写页面。我是在Github Pages上建的blog。因为GP支持Jekyll站点的自动编译，如果使用的是GP，那么用Jekyll建站可以不用考虑环境的问题。&lt;/p&gt;
+<p>Jekyll是一个Ruby语言编写的博客类网站的骨架，支持直接使用markdown代码编写页面。我是在Github Pages上建的blog。因为GP支持Jekyll站点的自动编译，如果使用的是GP，那么用Jekyll建站可以不用考虑环境的问题。</p>
 
-&lt;p&gt;由于Jekyll是基于Ruby的，可以在本地搭建Ruby的环境，这样就可以在本地做好页面的调试，部署在GP的Jekyll站点是难以在线调试的。配置Ruby环境最好选择LINUX，这样可以方便快速地配置环境，Windows用户可以在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wsl&lt;/code&gt;上操作。下面叙述Debian LINUX下搭建环境的过程。&lt;/p&gt;
+<p>由于Jekyll是基于Ruby的，可以在本地搭建Ruby的环境，这样就可以在本地做好页面的调试，部署在GP的Jekyll站点是难以在线调试的。配置Ruby环境最好选择LINUX，这样可以方便快速地配置环境，Windows用户可以在<code class="language-plaintext highlighter-rouge">wsl</code>上操作。下面叙述Debian LINUX下搭建环境的过程。</p>
 
-&lt;p&gt; &lt;/p&gt;
+<p> </p>
 
-&lt;p&gt;安装Ruby和编译环境&lt;/p&gt;
+<p>安装Ruby和编译环境</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apt install ruby ruby-dev make gcc g++ bundler
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt install ruby ruby-dev make gcc g++ bundler
+</code></pre></div></div>
 
-&lt;p&gt;安装Jekyll&lt;/p&gt;
+<p>安装Jekyll</p>
 
-&lt;blockquote&gt;
-  &lt;p&gt;可以选择先切换gem和bundler的安装源为国内源，这样会大大加快安装速度。&lt;/p&gt;
-&lt;/blockquote&gt;
+<blockquote>
+  <p>可以选择先切换gem和bundler的安装源为国内源，这样会大大加快安装速度。</p>
+</blockquote>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem install jekyll
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install jekyll
+</code></pre></div></div>
 
-&lt;p&gt; &lt;/p&gt;
+<p> </p>
 
-&lt;p&gt;环境搭建好时，建立一个Jekyll工程只需使用以下命令：&lt;/p&gt;
+<p>环境搭建好时，建立一个Jekyll工程只需使用以下命令：</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jekyll new [工程名称]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll new [工程名称]
+</code></pre></div></div>
 
-&lt;p&gt;这句命令会在当前目录下创建一个以工程名称命名的工程目录，然后在文件夹里添加Jekyll网站的整个框架。现在测试一下网站是否可以运行。运行Jekyll网站可以直接在&lt;strong&gt;工程目录&lt;/strong&gt;下执行以下命令。&lt;/p&gt;
+<p>这句命令会在当前目录下创建一个以工程名称命名的工程目录，然后在文件夹里添加Jekyll网站的整个框架。现在测试一下网站是否可以运行。运行Jekyll网站可以直接在<strong>工程目录</strong>下执行以下命令。</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle exec jekyll serve
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll serve
+</code></pre></div></div>
 
-&lt;p&gt;等待网站的编译。如果程序没有报错退出，说明编译成功，然后就可以在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;查看网站的运行情况了。&lt;/p&gt;
+<p>等待网站的编译。如果程序没有报错退出，说明编译成功，然后就可以在<code class="language-plaintext highlighter-rouge">localhost:4000</code>查看网站的运行情况了。</p>
 
-&lt;p&gt;最后需要对&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;和页面进行配置，把信息改成自己的。&lt;/p&gt;
+<p>最后需要对<code class="language-plaintext highlighter-rouge">_config.yml</code>和页面进行配置，把信息改成自己的。</p>
 
-&lt;p&gt;这时，网站已经可以使用和部署了，Jekyll的主题默认使用了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;minima&lt;/code&gt;。这个主题虽然简单，但是功能齐全，足够使用。我个人看到Github里上挂了很好看的主题，于是尝试配置了一下。使用主题有两种方式：&lt;/p&gt;
+<p>这时，网站已经可以使用和部署了，Jekyll的主题默认使用了<code class="language-plaintext highlighter-rouge">minima</code>。这个主题虽然简单，但是功能齐全，足够使用。我个人看到Github里上挂了很好看的主题，于是尝试配置了一下。使用主题有两种方式：</p>
 
-&lt;p&gt;一种方式是直接把主题的工程clone下来，然后手动修改配置，这种方法非常简单迅速，甚至可以在没有环境时完成对站点的配置。&lt;/p&gt;
+<p>一种方式是直接把主题的工程clone下来，然后手动修改配置，这种方法非常简单迅速，甚至可以在没有环境时完成对站点的配置。</p>
 
-&lt;p&gt;另一种方式是使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;引用主题的gem包，这种方法缺点非常明显。主题的gem包把配置文件全都封装进去，可配置的文件仅限于&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;和页面，这样就难以自己修改可复用元素的样式。
+<p>另一种方式是使用<code class="language-plaintext highlighter-rouge">Gemfile</code>引用主题的gem包，这种方法缺点非常明显。主题的gem包把配置文件全都封装进去，可配置的文件仅限于<code class="language-plaintext highlighter-rouge">_config.yml</code>和页面，这样就难以自己修改可复用元素的样式。
 但是使用这种方式，工程文件夹里只有有限的内容与相应主题相关，这让我可以迅速在不同主题之间迁移；相应地，在主题可以升级时只需执行升级命令，不用处理很多文件；
-这样还能减少工程目录的文件数目。&lt;/p&gt;
+这样还能减少工程目录的文件数目。</p>
 
-&lt;p&gt;使用gem格式的主题，首先要在Github上找到一个想要使用的主题项目，在项目页面上找到&lt;strong&gt;主题的gem&lt;/strong&gt;。第二步是把主题添加到配置里，需要修改的是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
+<p>使用gem格式的主题，首先要在Github上找到一个想要使用的主题项目，在项目页面上找到<strong>主题的gem</strong>。第二步是把主题添加到配置里，需要修改的是<code class="language-plaintext highlighter-rouge">Gemfile</code>和<code class="language-plaintext highlighter-rouge">_config.yml</code></p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Gemfile
-gem &quot;[gem名字]&quot;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Gemfile
+gem "[gem名字]"
 
 # _config.yml
 theme: [gem名字]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</code></pre></div></div>
 
-&lt;p&gt;在工程目录执行命令来安装主题&lt;/p&gt;
+<p>在工程目录执行命令来安装主题</p>
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle install
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle install
+</code></pre></div></div>
 
-&lt;p&gt;然后就可以参考&lt;strong&gt;对应主题&lt;/strong&gt;工程页面上的方法对主题进行配置，每种主题的配置方法&lt;strong&gt;各不相同&lt;/strong&gt;，需要仔细阅读配置方法，必要时阅读工程源文件。&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/extra/doc.css&quot; /&gt;
+<p>然后就可以参考<strong>对应主题</strong>工程页面上的方法对主题进行配置，每种主题的配置方法<strong>各不相同</strong>，需要仔细阅读配置方法，必要时阅读工程源文件。</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include &quot;stdio.h&quot;
-&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include "stdio.h"
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<span class="k">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></code></pre></figure>
 
-&lt;p&gt;中文文字显示&lt;/p&gt;
+<p>中文文字显示</p>
 
-&lt;p&gt;Roman alphabet display&lt;/p&gt;</content><author><name>cainslayer</name></author><summary type="html"></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-08-15T21:34:40+08:00</published><updated>2020-08-15T21:34:40+08:00</updated><id>http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<p>Roman alphabet display</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-08-15T21:34:40+08:00</published><updated>2020-08-15T21:34:40+08:00</updated><id>http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/08/15/welcome-to-jekyll.html"><![CDATA[<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+<p>To add new posts, simply add a file in the <code class="language-plaintext highlighter-rouge">_posts</code> directory that follows the convention <code class="language-plaintext highlighter-rouge">YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+<p>Jekyll also offers powerful support for code snippets:</p>
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
+<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>cainslayer</name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name>cainslayer</name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.]]></summary></entry></feed>
