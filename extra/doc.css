@@ -1,0 +1,26 @@
+/* code format */
+@import "highlight/friendly.css";
+
+pre, code {
+	border: solid 1px grey;
+	border-radius: 3px;
+}
+
+code {
+	padding: 1px 5px;
+}
+
+pre {
+	padding: 8px 12px;
+	border-left: solid 3px darkcyan;
+}
+
+pre > code {
+	border: 0;
+	padding-right: 0;
+	padding-left: 0;
+}
+
+p {
+	font-family: 'Lora', 'Noto Sans SC', 'Roboto', sans-serif;
+}

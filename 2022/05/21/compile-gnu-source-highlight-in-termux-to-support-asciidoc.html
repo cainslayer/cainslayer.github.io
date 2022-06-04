@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    在termux编译source-highlight以支持asciidoc - closesauce.
+    
+  </title>
+
+  <meta name="description" content="">
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html">
+  <link rel="alternate" type="application/rss+xml" title="closesauce." href="/feed.xml">
+
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">closesauce.</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+  <header class="masthead">
+    
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>在termux编译source-highlight以支持asciidoc</h1>
+            
+            <span class="meta">Posted by
+              <a href="#">cainslayer</a>
+              on May 21, 2022 &middot; <span class="reading-time" title="Estimated read time">
+  
+   1 min  read </span>
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+
+        <link rel="stylesheet" href="/extra/doc.css" />
+
+<h2 id="前提">前提</h2>
+
+<p>在termux直接安装的 <code class="language-plaintext highlighter-rouge">asciidoc</code> 不具备语法高亮能力，因为它依赖GNU <code class="language-plaintext highlighter-rouge">source-highlight</code>。而官方仓库不包含这个包，所以输出的代码是没有语法高亮的。如果在termux编译安装 <code class="language-plaintext highlighter-rouge">source-highlight</code>，就可以输出包含语法高亮的HTML文档。</p>
+
+<h2 id="configure">configure</h2>
+
+<p>配置编译环境。</p>
+
+<h3 id="下载源码">下载源码</h3>
+
+<p>在GNU官网查看该软件的信息 <code class="language-plaintext highlighter-rouge">https://www.gnu.org/software/src-highlite</code>，可以使用官网的地址下载，也可以通过距离较近的GNU镜像下载。下载后解压即可。</p>
+
+<h3 id="在termux中包含-boostregex">在termux中包含 boost::regex</h3>
+
+<p>欲编译<code class="language-plaintext highlighter-rouge">source-highlight</code>，首先需要安装c++工具链，在termux安装<code class="language-plaintext highlighter-rouge">clang</code>即可。虽然现代c++包含<code class="language-plaintext highlighter-rouge">std::regex</code>，但这个项目用regex的位置多且复杂，选择对库进行替换是不合算的。</p>
+
+<p>由于需要在编译器使用boost的符号，故需要在termux安装完整的boost库，执行</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkg install boost*
+</code></pre></div></div>
+<p>这将安装<code class="language-plaintext highlighter-rouge">boost</code> (动态链接库)， <code class="language-plaintext highlighter-rouge">boost-headers</code> (头文件) 和 <code class="language-plaintext highlighter-rouge">boost-static</code> (静态连接库)。</p>
+
+<h3 id="执行configure">执行configure</h3>
+
+<blockquote>
+  <p>这一步不要先做，因为需要设置编译选项，见后文。</p>
+</blockquote>
+
+<p>需要告诉<code class="language-plaintext highlighter-rouge">configure</code>命令boost库文件夹所在的位置</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure --with-boost-libdir="$PREFIX/lib/"
+</code></pre></div></div>
+
+<h2 id="编译和安装">编译和安装</h2>
+
+<p>编译 <code class="language-plaintext highlighter-rouge">source-highlight</code> 库，提供给 <code class="language-plaintext highlighter-rouge">asciidoc</code> 使用。</p>
+
+<h3 id="执行make">执行make</h3>
+
+<p>这时如果直接执行<code class="language-plaintext highlighter-rouge">make</code>，大概率会报错误</p>
+
+<p>… cannot locate symbol “__aarch64_ldadd8_relax” referenced by …</p>
+
+<p>使用桌面平台Android SDK提供的ndk工具链编译这个库，依然会报这个错误，说明此问题不是单纯由termux中的工具链导致的。使用其他品牌手机执行，依然会报这个错误，说明它很有可能是与OEM无关的。</p>
+
+<p>经过<a href="https://github.com/rust-lang/git2-rs/issues/706">查询</a>，找到一个解决方案，增加编译选项，设置以下环境变量</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export CFLAGS=-mno-outline-atomics
+export CXXFLAGS=-mno-outline-atomics
+</code></pre></div></div>
+
+<p>设置完编译选项后先按前文执行<code class="language-plaintext highlighter-rouge">configure</code>然后</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make
+</code></pre></div></div>
+<p>问题应该已经解决。</p>
+
+<h3 id="在执行make时报了上文的错误">在执行make时报了上文的错误</h3>
+
+<p>由于编译选项已经由<code class="language-plaintext highlighter-rouge">configure</code>程序写入<code class="language-plaintext highlighter-rouge">Makefile</code>，故这时只能重新配置。</p>
+
+<p>先通过这个命令清除<code class="language-plaintext highlighter-rouge">Makefile</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make distclean
+</code></pre></div></div>
+
+<p>其次，按照前文设置<code class="language-plaintext highlighter-rouge">CFLAGS</code>和<code class="language-plaintext highlighter-rouge">CXXFLAGS</code>。</p>
+
+<p>然后，按照前文的命令执行<code class="language-plaintext highlighter-rouge">configure</code>。</p>
+
+<p>最后，执行make，问题应该已经解决。</p>
+
+<h3 id="安装">安装</h3>
+
+<p>最后需要安装以供 <code class="language-plaintext highlighter-rouge">asciidoc</code> 使用，可以采用设置环境变量的方式，也可以安装到对应位置。由于termux环境目录结构特殊，无法使用 ~<code class="language-plaintext highlighter-rouge">make install</code>~ 安装，只能手动安装。</p>
+
+<p>由于编译完成后库目录被硬编码进command wrapper，可以只使用软连接的方式安装 <code class="language-plaintext highlighter-rouge">source-highlight</code>，<code class="language-plaintext highlighter-rouge">source-highlight-settings</code> 和 <code class="language-plaintext highlighter-rouge">check-regexp</code>，</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $PREFIX/bin/
+ln -s [源码目录]/src/source-highlight source-highlight
+ln -s [源码目录]/src/source-highlight-settings source-highlight-settings
+ln -s [源码目录]/src/check-regexp check-regexp
+</code></pre></div></div>
+
+<h3 id="关于outlangmap">关于outlang.map</h3>
+
+<p>经过<a href="https://github.com/Homebrew/homebrew-core/issues/18087">查询</a>，如果报错</p>
+
+<p>source-highlight: cannot find input file anywhere outlang.map</p>
+
+<p>就编辑 <code class="language-plaintext highlighter-rouge">source-highlight</code> 这个command wrapper，可以</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim `which source-highlight`
+</code></pre></div></div>
+<p>找到 <code class="language-plaintext highlighter-rouge">func_exec_program_core</code> 函数，修改<code class="language-plaintext highlighter-rouge">exec</code>命令的参数。可以直接在 <code class="language-plaintext highlighter-rouge">"$progdir/$program"</code> 的后面添加参数</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"--data-dir=[源码地址]/src"
+</code></pre></div></div>
+<p>以指出存放 <code class="language-plaintext highlighter-rouge">outlang.map</code> 等文件的路径。</p>
+
+
+        <hr>
+
+        <div class="clearfix">
+
+          
+          <a class="btn btn-primary float-left" href="/2022/05/11/maths-test.html" data-toggle="tooltip" data-placement="top" title="MathJax数学公式测试">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          <li class="list-inline-item">
+            <a href="https://twitter.com/anonymous">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://github.com/cainslayer">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; cainslayer 2022</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/scripts.js"></script>
+
+<script src="/assets/scripts.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '');
+</script>
+
+
+
+</body>
+
+</html>
