@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-05-21T22:38:42+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>Do not use gitee meow. Do not use gitee thanks meow.</subtitle><author><name>cainslayer</name></author><entry><title type="html">在termux编译source-highlight以支持asciidoc</title><link href="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html" rel="alternate" type="text/html" title="在termux编译source-highlight以支持asciidoc" /><published>2022-05-21T20:06:00+08:00</published><updated>2022-05-21T20:06:00+08:00</updated><id>http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc</id><content type="html" xml:base="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
 <h2 id="前提">前提</h2>
@@ -109,6 +110,9 @@ ln -s [源码目录]/src/check-regexp check-regexp
 \[\oint{ \boldsymbol{\overrightarrow{F}} \cdot d \boldsymbol{\overrightarrow{r}} } = \iint{(\nabla \times \boldsymbol{\overrightarrow{F}}) d \boldsymbol{\overrightarrow{S}} }\]
 
 \[i \hbar \frac{\partial \Psi}{\partial t} = - {\frac {\hbar^2}{2m}} \nabla^2 \Psi + V \Psi\]]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作</title><link href="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html" rel="alternate" type="text/html" title="配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作" /><published>2022-01-12T21:52:32+08:00</published><updated>2022-01-12T21:52:32+08:00</updated><id>http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android</id><content type="html" xml:base="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
+=======
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-01-12T23:35:13+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>世界的意义存在于世界之外。</subtitle><author><name>cainslayer</name></author><entry><title type="html">配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作</title><link href="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html" rel="alternate" type="text/html" title="配置Retroarch的PC-98模拟器以在Android上执行东方Project旧作" /><published>2022-01-12T21:52:32+08:00</published><updated>2022-01-12T21:52:32+08:00</updated><id>http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android</id><content type="html" xml:base="http://localhost:4000/2022/01/12/configure-retroarch-to-execute-pc98-touhou-on-android.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
+>>>>>>> b44419d87b16fa49ea5b6d1bcf21cc275a42c477
 
 <h2 id="前提">前提</h2>
 
@@ -504,7 +508,11 @@ theme: [gem名字]
 
 <p>然后就可以参考<strong>对应主题</strong>工程页面上的方法对主题进行配置，每种主题的配置方法<strong>各不相同</strong>，需要仔细阅读配置方法，必要时阅读工程源文件。</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">文字测试</title><link href="http://localhost:4000/2020/08/25/code-test.html" rel="alternate" type="text/html" title="文字测试" /><published>2020-08-25T23:45:03+08:00</published><updated>2020-08-25T23:45:03+08:00</updated><id>http://localhost:4000/2020/08/25/code-test</id><content type="html" xml:base="http://localhost:4000/2020/08/25/code-test.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
+<<<<<<< HEAD
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">"stdio.h"</span><span class="cp">
+=======
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include "stdio.h"
+>>>>>>> b44419d87b16fa49ea5b6d1bcf21cc275a42c477
 </span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
 	<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">);</span>
