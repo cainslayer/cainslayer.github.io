@@ -1,4 +1,517 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-05-21T22:38:42+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>Do not use gitee meow. Do not use gitee thanks meow.</subtitle><author><name>cainslayer</name></author><entry><title type="html">在termux编译source-highlight以支持asciidoc</title><link href="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html" rel="alternate" type="text/html" title="在termux编译source-highlight以支持asciidoc" /><published>2022-05-21T20:06:00+08:00</published><updated>2022-05-21T20:06:00+08:00</updated><id>http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc</id><content type="html" xml:base="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-17T22:55:30+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">closesauce.</title><subtitle>Do not use gitee meow. Do not use gitee thanks meow.</subtitle><author><name>cainslayer</name></author><entry><title type="html">积分表演绎</title><link href="http://localhost:4000/2022/07/15/table-of-integrals-demonstrate.html" rel="alternate" type="text/html" title="积分表演绎" /><published>2022-07-15T19:17:21+08:00</published><updated>2022-07-15T19:17:21+08:00</updated><id>http://localhost:4000/2022/07/15/table-of-integrals-demonstrate</id><content type="html" xml:base="http://localhost:4000/2022/07/15/table-of-integrals-demonstrate.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
+
+<script src="/extra/MathJax/polyfill.min.js"></script>
+
+<script src="/extra/MathJax/MathJax-3.2.0/es5/tex-mml-chtml.js"></script>
+
+<p>积分表的模板来自 <a href="https://www.integral-table.com/downloads/integral-table.pdf">网站</a> 。本文对积分表的导出过程进行演绎。</p>
+
+\[\newcommand{\dif}{\mathrm d}\]
+
+\[\newcommand{\ddx}{\frac \dif {\dif x}}\]
+
+<h2 id="basic-forms">Basic Forms</h2>
+
+<p> </p>
+
+<h4 id="1">1.</h4>
+
+\[\int {x^n \, \dif x} = \frac 1 {n+1} x^{n+1} , \, n \neq -1\]
+
+<p>  \(Proof:\)</p>
+
+\[\because \ddx x^n
+= \lim \limits_{h \to 0} \frac { (x+h)^n - x^n } h
+= \lim \limits_{h \to 0} \frac { (x^n + n \cdot h x^{n-1} + \omicron (h))) - x^n } h
+= n x^{n-1}\]
+
+\[\therefore \ddx \frac {x^{n+1}} {n+1} = x^n\]
+
+<p>  \(\square\)</p>
+
+<h4 id="2">2.</h4>
+
+\[\int {\frac 1 x \, \dif x} = \ln | x |\]
+
+<p>  \(Proof:\)</p>
+
+\[\lim \limits_{v \to \pm \infty} \, (1 + \frac 1 v)^v  = \mathrm e\]
+
+\[\Rightarrow \lim \limits_{u \to 0} \, (1+u)^{\frac 1 u} = \mathrm e\]
+
+\[\Rightarrow \lim \limits_{u \to 0} \frac {\ln (1+u)} u = 1\]
+
+\[\textup{if } x &gt; 0\]
+
+\[\ddx \ln x
+= \lim \limits_{h \to 0} \frac {\ln (x+h) - \ln x} h
+= \lim \limits_{h \to 0} \frac {\ln ( 1 + \frac h x )} h
+= \frac 1 x\]
+
+\[\textup{if } x &lt; 0\]
+
+\[\ddx \ln {(-x)}
+= - \lim \limits_{h \to 0} \frac {\ln ( 1 - \frac h x )} h
+= \frac 1 x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="3">3.</h4>
+
+\[\int u \, \dif v = uv - \int v \, \dif u\]
+
+<p>  \(Proof:\)</p>
+
+\[\because \ddx uv
+= \lim \limits_{h \to 0} \frac {u(x+h) v(x+h) - u(x) v(x)} h\]
+
+\[= \lim \limits_{h \to 0} \frac {u(x+h) (v(x+h) - v(x))} h
++ \lim \limits_{h \to 0} \frac {v(x) (u(x+h) - u(x))} h\]
+
+\[= u(x) \ddx v(x) + v(x) \ddx u(x)\]
+
+\[\therefore \dif uv = u \dif v + v \dif u\]
+
+<p>  \(\square\)</p>
+
+<h4 id="4">4.</h4>
+
+\[\int \frac 1 {ax+b} \dif x = \frac 1 a \ln | ax+b |\]
+
+<p>  \(Trivially\)</p>
+
+<h2 id="integrals-of-rational-functions">Integrals of Rational Functions</h2>
+
+<p> </p>
+
+<h4 id="5">5.</h4>
+
+\[\int \frac 1 {(x+a)^2} \, \dif x = - \frac 1 {x+a}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="6">6.</h4>
+
+\[\int (x+a)^n \dif x = \frac {(x+a)^{n+1}} {n+1}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="7">7.</h4>
+
+\[\int x (x+a)^n \dif x = \frac {(x+a)^{n+1} ((n+1)x - a) } {(n+1)(n+2)}\]
+
+<p>  \(Proof:\)</p>
+
+\[\int x (x+a)^n \dif x = \int (x+a)^{n+1} \dif x - a \int (x+a)^n \dif x\]
+
+\[= \frac {(x+a)^{n+2}} {n+2} - a \frac {(x+a)^{n+1}} {n+1}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="8">8.</h4>
+
+\[\int \frac 1 {1 + x^2} = \arctan x\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{let } \arctan x = u, \, u \in [ - \frac \pi 2, \frac \pi 2]\]
+
+\[\Rightarrow x = \tan u\]
+
+\[\Rightarrow 1 = \sec ^2 u \cdot \ddx \, u\]
+
+\[\Rightarrow \ddx \, u = \cos ^2 u = \frac 1 {1 + \tan ^ 2 u}\]
+
+\[\textup{i.e. } \ddx \, \arctan x = \frac 1 {1 + x^2}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="9">9.</h4>
+
+\[\int \frac 1 {a^2 + x^2} \dif x = \frac 1 a \arctan {\frac x a}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="10">10.</h4>
+
+\[\int \frac x {a^2 + x^2} \dif x = \frac 1 2 \ln (a^2 + x^2)\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="11">11.</h4>
+
+\[\int \frac {x^2} {a^2 + x^2} \dif x = x - a \arctan {\frac x a}\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac {x^2} {a^2 + x^2} \dif x = \int \dif x - a^2 \int \frac 1 {a^2 + x^2} \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="12">12.</h4>
+
+\[\int \frac {x^3} {a^2 + x^2} \dif x = \frac 1 2 x^2 - \frac {a^2} 2 \ln (a^2 + x^2)\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac {x^3} {a^2 + x^2} \dif x = \int (1 - \frac {a^2} {a^2 + x^2}) x \dif x
+= \int x \dif x - a^2 \int \frac x {a^2 + x^2} \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="13">13.</h4>
+
+\[\int \frac 1 {a x^2 + b x + c} \dif x = \frac 2 {\sqrt {4 ac - b^2}} \arctan \frac {2 ax + b} {\sqrt {4 ac - b^2}}\]
+
+<p>  \(Proof:\)</p>
+
+\[a x^2 +  b x + c = a ( (x + \frac b {2a})^2 + \frac {4 ac - b^2} {4 a^2} )\]
+
+\[\textup{In this case: } \Delta = b^2 - 4 ac &lt; 0\]
+
+\[\textup{let } u = x + \frac b {2a}\]
+
+\[\int \frac 1 {a x^2 + b x + c} \dif x = \frac 1 a \int \frac 1 {u^2 + \frac {- \Delta} {4 a^2}} \dif u
+= \frac 2 {\sqrt {- \Delta}} \arctan \frac {2 au} {\sqrt {- \Delta}}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="14">14.</h4>
+
+\[\int \frac 1 {(x+a)(x+b)} \dif x = \frac 1 {b-a} \ln \frac {a+x} {b+x} , \, a \ne b\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a+x &gt; 0 , \, b+x &gt; 0\]
+
+\[\int \frac 1 {(x+a)(x+b)} \dif x = \frac 1 {b-a} (\int \frac 1 {x+a} \dif x - \int \frac 1 {x+b} \dif x )\]
+
+<p>  \(\square\)</p>
+
+<h4 id="15">15.</h4>
+
+\[\int \frac x {(x+a)^2} \dif x = \frac a  {a+x} + \ln | a+x |\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac x {(x+a)^2} \dif x = \int \frac 1 {a+x} \dif x - a \int \frac 1 {(a+x)^2} \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="16">16.</h4>
+
+\[\int \frac x {a x^2 + b x + c} \dif x = \frac 1 {2a} \ln | ax^2+bx+c | - \frac b {a \sqrt {4 ac - b^2}} \arctan \frac {2 ax + b} {\sqrt {4 ac - b^2}}\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac x {a x^2 + b x + c} \dif x = \frac 1 {2a} \int \frac {2 ax + b} {ax^2 + bx + c} \dif x - \frac b {2a} \int \frac 1 {ax^2 + bx + c} \dif x\]
+
+<p>  \(\square\)</p>
+
+<h2 id="integrals-with-roots">Integrals with Roots</h2>
+
+<p> </p>
+
+<h4 id="17">17.</h4>
+
+\[\int \sqrt {x+a} \, \dif x = \frac 2 3 (x+a)^{\frac 3 2}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="18">18.</h4>
+
+\[\int \frac 1 {\sqrt {x + a}} \dif x = 2 \sqrt {x + a}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="19">19.</h4>
+
+\[\int \frac 1 {\sqrt {a-x}} \dif x = - 2 \sqrt {a-x}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="20">20.</h4>
+
+\[\int x \sqrt{x-a} \, \dif x = \frac 2 5 (x-a)^{\frac 5 2} + \frac {2a} 3 (x-a) ^ {\frac 3 2}\]
+
+<p>  \(Proof:\)</p>
+
+\[\int x \sqrt{x-a} \, \dif x = \int (x-a)^{\frac 3 2} \, \dif x + a \int \sqrt {x-a} \, \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="21">21.</h4>
+
+\[\int \sqrt {ax+b} \, \dif x = \frac 2 {3a} (ax+b)^{\frac 3 2} = \frac 2 3 (\frac b a + x) \sqrt {ax+b}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="22">22.</h4>
+
+\[\int (ax+b)^{\frac 3 2} \, \dif x = \frac 2 {5a} (ax+b)^{\frac 5 2}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="23">23.</h4>
+
+\[\int \frac x {\sqrt {x+a}} \dif x = \frac 2 3 (x-2a) \sqrt {x+a}\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac x {\sqrt {x+a}} \dif x = \int \sqrt {x+a} \, \dif x - a \int \frac 1 {\sqrt {x+a}} \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="24">24.</h4>
+
+\[\int \sqrt {\frac x {a-x}} \dif x = - \sqrt {x (a-x)} + a \arctan \sqrt {\frac x {a-x}}\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{As for intergral } \int \frac 1 {(1+t^2)^2} \dif t \textup{, let } t = \tan u\]
+
+\[\int \frac 1 {(1+t^2)^2} \dif t = \int \cos ^2 u \dif u
+= \frac u 2 + \frac {\sin 2u} 4
+= \frac {\arctan t} 2 + \frac t {2(1+t^2)}\]
+
+\[\textup{let } t = \sqrt {\frac x {a-x}}\]
+
+\[\int \sqrt {\frac x {a-x}} \dif x\]
+
+\[= 2 a \int \frac {t^2} {(1+t^2)^2} \dif t\]
+
+\[= 2 a \int \frac 1 {1+t^2} \dif t - 2 a \int \frac 1 {(1+t^2)^2} \dif t\]
+
+\[= a \arctan t - \frac {at} {1+t^2}\]
+
+\[\textup{i.e. } \int \sqrt {\frac x {a-x}} \dif x = - \sqrt {x (a-x)} + a \arctan \sqrt {\frac x {a-x}}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="25">25.</h4>
+
+\[\int \sqrt {\frac x {a+x}} \dif x = \sqrt {x (a+x)} - a \ln (\sqrt x + \sqrt {x+a})\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{let } t = \sqrt {\frac x {a+x}} \textup{, then } x = \frac a 2 (\frac 1 {1-t} + \frac 1 {1+t}) - a\]
+
+\[\textup{In this case: } a &gt; 0\]
+
+\[\int \sqrt {\frac x {a+x}} \dif x\]
+
+\[= \frac a 2 (\int \frac t {(t-1)^2} \dif t - \int \frac t {(t+1)^2} \dif t)\]
+
+\[= \frac a 2 (\int \frac 1 {(t-1)^2} \dif t + \int \frac 1 {(t+1)^2} \dif t - 2 \int \frac 1 {1-t^2} \dif t)\]
+
+\[= a \frac t {1-t^2} - a \, \mathrm{arctanh} \, t\]
+
+\[\textup{i.e. } \int \sqrt {\frac x {a+x}} \dif x = \sqrt {x (a+x)} - a \ln (\sqrt x + \sqrt {x+a}) + C\]
+
+<p>  \(\square\)</p>
+
+<h4 id="26">26.</h4>
+
+\[\int x \sqrt{ax+b} \, \dif x = (\frac {-4b^2} {15a^2} + \frac {2bx} {15a} + \frac {2x^2} 5) \sqrt {ax+b}\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{let } t = ax+b\]
+
+\[\int x \sqrt{ax+b} \, \dif x = \frac 1 {a^2} \int t \sqrt t \, dt - \frac b {a^2} \int \sqrt t \dif t = (\frac 2 {5a^2} t^2 - \frac {2b} {3a^2} t) \sqrt t\]
+
+\[\textup{i.e. } \int x \sqrt{ax+b} \, \dif x = (\frac 2 {5a^2} (ax+b)^2 - \frac {2b} {3a^2} (ax+b)) \sqrt {ax+b}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="27">27.</h4>
+
+<h4 id="28">28.</h4>
+
+<h4 id="29">29.</h4>
+
+\[\int \sqrt {x^2 \pm a^2} \, \dif x = \frac 1 2 x \sqrt {x^2 \pm a^2} \pm \frac {a^2} 2 \ln |x + \sqrt {x^2 \pm a^2}|\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a &gt; 0\]
+
+<p>  \(\textup{Case +: }\)</p>
+
+\[\int \cosh ^2 t \, \dif t = \int \frac {1 + \cosh 2t} 2 \dif t = \frac t 2 + \frac {\sinh 2t} 4\]
+
+\[\textup{let } x = a \sinh t\]
+
+\[\int \sqrt {x^2 + a^2} \, \dif x\]
+
+\[= a^2 \int \cosh ^2 t \, \dif t\]
+
+\[= \frac {a^2} 2 (t + \sinh t \cosh t)\]
+
+\[\textup{i.e. } \int \sqrt {x^2 + a^2} \, \dif x = \frac {a^2} 2 \, \mathrm{arcsinh} \, \frac x a + \frac 1 2 x \sqrt {x^2 + a^2}\]
+
+<p>  \(\textup{Case -: }\)</p>
+
+\[\int \sinh ^2 t \, \dif t = \int \frac {-1 + \cosh 2t} 2 \dif t = - \frac t 2 + \frac {\sinh 2t} 4\]
+
+\[\textup{(1) When } x &gt; 0 \textup{, let } x = a \cosh t\]
+
+\[\int \sqrt {x^2 - a^2} \, \dif x\]
+
+\[= a^2 \int \sinh ^2 t \, \dif t\]
+
+\[= \frac {a^2} 2 (- t + \sinh t \cosh t)\]
+
+\[\textup{i.e. } \int \sqrt {x^2 + a^2} \, \dif x = - \frac {a^2} 2 \, \mathrm{arccosh} \, \frac x a + \frac 1 2 x \sqrt {x^2 - a^2}\]
+
+\[\textup{(2) When } x &lt; 0 \textup{, let } x = - a \cosh t\]
+
+\[\int \sqrt {x^2 - a^2} \, \dif x\]
+
+\[= - a^2 \int \sinh ^2 t \, \dif t\]
+
+\[= \frac {a^2} 2 (t - \sinh t \cosh t)\]
+
+\[\textup{i.e. } \int \sqrt {x^2 + a^2} \, \dif x = \frac {a^2} 2 \, \mathrm{arccosh} \, (- \frac x a) + \frac 1 2 x \sqrt {x^2 - a^2}\]
+
+<p>  \(\square\)</p>
+
+<h4 id="30">30.</h4>
+
+\[\int \sqrt {a^2 - x^2} \, \dif x = \frac 1 2 x \sqrt {a^2 - x^2} + \frac 1 2 a^2 \arctan \frac x {\sqrt {a^2 - x^2}}\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a &gt; 0\]
+
+\[\textup{let } x = a \cos t, \, t \in [ - \frac \pi 2, \frac \pi 2]\]
+
+\[\int \sqrt {a^2 - x^2} \, \dif x\]
+
+\[= - a^2 \int \sin ^2 t \, \dif t\]
+
+\[= \frac {a^2} 2 (\sin t \cos t - t)\]
+
+\[\textup{i.e. } \int \sqrt {a^2 - x^2} \, \dif x\]
+
+\[= \frac 1 2 x \sqrt {a^2 - x^2} - \frac {a^2} 2 \arccos \frac x a\]
+
+\[= \frac 1 2 x \sqrt {a^2 - x^2} - \frac {a^2} 2 \arctan \frac {\sqrt {a^2 - x^2}} x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="31">31.</h4>
+
+\[\int x \sqrt {x^2 \pm a^2} \, \dif x = \frac 1 3 (x^2 \pm a^2)^{\frac 3 2}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="32">32.</h4>
+
+\[\int \frac 1 {\sqrt {x^2 \pm a^2}} \dif x = \ln |x + \sqrt {x^2 \pm a^2}|\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a &gt; 0\]
+
+<p>  \(\textup{Case +: }\)</p>
+
+\[\textup{let } x = a \sinh t\]
+
+\[\int \frac 1 {\sqrt {x^2 + a^2}} \, \dif x = \int \, \dif t = t\]
+
+\[\textup{i.e. } \int \frac 1 {\sqrt {x^2 + a^2}} \, \dif x = \mathrm{arcsinh} \, \frac x a\]
+
+<p>  \(\textup{Case -: }\)</p>
+
+\[\textup{(1) When } x &gt; 0 \textup{, let } x = a \cosh t\]
+
+\[\int \frac 1 {\sqrt {x^2 - a^2}} \, \dif x = \int \, \dif t = t\]
+
+\[\textup{i.e. } \int \frac 1 {\sqrt {x^2 - a^2}} \, \dif x = \mathrm{arccosh} \, \frac x a\]
+
+\[\textup{(2) When } x &lt; 0 \textup{, let } x = - a \cosh t\]
+
+\[\int \frac 1 {\sqrt {x^2 - a^2}} \, \dif x = - \int \, \dif t = - t\]
+
+\[\textup{i.e. } \int \frac 1 {\sqrt {x^2 - a^2}} \, \dif x = - \mathrm{arccosh} \, (- \frac x a)\]
+
+<p>  \(\square\)</p>
+
+<h4 id="33">33.</h4>
+
+\[\int \frac 1 {\sqrt {a^2 - x^2}} \dif x = \arcsin \frac x a\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{let } x = a \sin t, \, t \in [ - \frac \pi 2, \frac \pi 2]\]
+
+\[\int \frac 1 {\sqrt {a^2 - x^2}} \dif x = \int \, \dif t = t\]
+
+<p>  \(\square\)</p>
+
+<h4 id="34">34.</h4>
+
+\[\int \frac x {\sqrt {x^2 \pm a^2}} \, \dif x = \sqrt {x^2 \pm a^2}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="35">35.</h4>
+
+\[\int \frac x {\sqrt {a^2 - x^2}} \, \dif x = - \sqrt {a^2 - x^2}\]
+
+<p>  \(Trivially\)</p>
+
+<h4 id="36">36.</h4>
+
+\[\int \frac {x^2} {\sqrt {x^2 \pm a^2}} \, \dif x = \frac 1 2 x \sqrt {x^2 \pm a^2} \mp \frac 1 2 a^2 \ln |x + \sqrt {x^2 \pm a^2}|\]
+
+<p>  \(Proof:\)</p>
+
+\[\int \frac {x^2} {\sqrt {x^2 \pm a^2}} \, \dif x = \int \sqrt {x^2 \pm a^2} \, \dif x \mp a^2 \int \frac 1 {\sqrt {x^2 \pm a^2}} \, \dif x\]
+
+<p>  \(\square\)</p>
+
+<h4 id="37">37.</h4>
+
+<h4 id="38">38.</h4>
+
+<h4 id="39">39.</h4>
+
+\[\int \frac 1 {\sqrt {ax^2 + bx + c}} \dif x = \frac 1 {\sqrt a} \ln \left| 2ax + b + 2 \sqrt {a(ax^2 + bx + c)} \right|\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a &gt; 0\]
+
+\[\int \frac 1 {\sqrt {ax^2 + bx + c}} \dif x\]
+
+\[= \frac 1 {\sqrt a} \int \frac 1 {\sqrt {(x + \frac b {2a})^2 + \frac {4ac - b^2} {4a^2}}} \dif x\]
+
+\[= \frac 1 {\sqrt a} ln \left|(x + \frac b {2a}) + \sqrt {\frac {ax^2 + bx + c} a} \right|\]
+
+<p>  \(\square\)</p>
+
+<h4 id="40">40.</h4>
+
+<h4 id="41">41.</h4>
+
+\[\int \frac 1 {(a^2 + x^2)^{\frac 3 2}} \, \dif x = \frac x {a^2 \sqrt {a^2 + x^2}}\]
+
+<p>  \(Proof:\)</p>
+
+\[\textup{In this case: } a &gt; 0\]
+
+\[\textup{let } x = a \sinh t\]
+
+\[\int \frac 1 {(a^2 + x^2)^{\frac 3 2}} \, \dif x
+= \frac 1 {a^2} \int \mathrm{sech} ^2 t \, \dif t
+= \frac 1 {a^2} \tanh t\]
+
+\[\textup{i.e. } \int \frac 1 {(a^2 + x^2)^{\frac 3 2}} \, \dif x
+= \frac 1 {a^2} \cdot \frac {x/a} {\sqrt {1 + (x/a)^2}}\]
+
+<p>  \(\square\)</p>]]></content><author><name>cainslayer</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">在termux编译source-highlight以支持asciidoc</title><link href="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html" rel="alternate" type="text/html" title="在termux编译source-highlight以支持asciidoc" /><published>2022-05-21T20:06:00+08:00</published><updated>2022-05-21T20:06:00+08:00</updated><id>http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc</id><content type="html" xml:base="http://localhost:4000/2022/05/21/compile-gnu-source-highlight-in-termux-to-support-asciidoc.html"><![CDATA[<link rel="stylesheet" href="/extra/doc.css" />
 
 <h2 id="前提">前提</h2>
 
